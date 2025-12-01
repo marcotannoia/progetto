@@ -1,13 +1,64 @@
-version: "3.8" 
+version: '3.8'
 
 services:
- 
-  web:
-    
-    build: . 
-   
+  # ---------------------------------------------
+  # 1. DATABASE (PostgreSQL)
+  # ---------------------------------------------
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: miodb
     ports:
-      - "80:8000" 
-
+      - "5432:5432"
     volumes:
-      - .:/app 
+      - postgres_data:/var/lib/postgresql/data
+
+  # ---------------------------------------------
+  # 2. GESTIONE DB (Adminer - Interfaccia Web)
+  # ---------------------------------------------
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080" # Vai su localhost:8080 per gestire il DB
+    depends_on:
+      - db
+
+  # ---------------------------------------------
+  # 3. BACKEND (Python)
+  # ---------------------------------------------
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app # "Volume magico": modifichi il codice e si aggiorna nel container
+    environment:
+      # Passiamo le credenziali al codice Python tramite variabili d'ambiente
+      - DB_HOST=db       # IMPORTANTE: qui si usa il nome del servizio "db", non localhost
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=miodb
+    depends_on:
+      - db
+
+  # ---------------------------------------------
+  # 4. FRONTEND 
+  # ---------------------------------------------
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"  # Porta 3000 (standard React)
+    volumes:
+      - ./frontend:/app         # Collegamento per vedere le modifiche live
+      - /app/node_modules       # TRUCCO: Evita che Docker cancelli le librerie installate dentro
+    stdin_open: true            # IMPORTANTE: Serve per non far chiudere React subito
+    tty: true                   # IMPORTANTE: Serve per input da terminale
+    depends_on:
+      - backend
+
+# Definizione del volume per non perdere i dati del DB se spegni docker
+volumes:
+  postgres_data:
