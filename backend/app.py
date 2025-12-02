@@ -20,5 +20,6 @@ def saluta():
     dati = {"messaggio": "Ciao Marco! Questi dati arrivano da Python!"}
     return jsonify(dati)
 
-if __name__ == '__main__': #
-    app.run(host='0.0.0.0', port=50000) #ogni function backend ha la sua porta
+if __name__ == '__main__':
+    # host='0.0.0.0' è fondamentale per Docker!
+    app.run(host='0.0.0.0', port=5000, debug=True)
