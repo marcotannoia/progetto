@@ -41,7 +41,7 @@ services:
       - DB_USER=user
       - DB_PASSWORD=password
       - DB_NAME=miodb
-      - GOOGLE_API_KEY=AIzaSyD2PIPkJR0VYgyhQhXFkAibh_d_c-HiHkc  # Sostituisci con la tua chiave API
+      - GOOGLE_API_KEY=AIzaSyD2PIPkJR0VYgyhQhXFkAibh_d_c-HiHkc 
     depends_on:
       - db
 
