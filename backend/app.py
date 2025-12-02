@@ -3,7 +3,7 @@ from flask_cors import CORS # Importante per far parlare React e Python
 import os
 from flask import Flask, jsonify, request
 import maps
-
+from mezzo import opzione_trasporto
 # Legge la variabile dal sistema operativo del container
 API_KEY = os.environ.get("GOOGLE_API_KEY") 
 
@@ -15,6 +15,7 @@ if not API_KEY:
 app = Flask(__name__)
 CORS(app) # Abilita le chiamate dal frontend
 
+#  scelta percorso
 
 @app.route('/api/navigazione', methods=['POST'])
 def calcola_percorso():
@@ -32,7 +33,17 @@ def calcola_percorso():
         return jsonify(risultato)
     else:
         return jsonify({"errore": "Impossibile calcolare il percorso (Indirizzi non validi?)"}), 404
+
+
+# scelta veicoli
+
+@app.route('/api/veicoli', methods=['GET'])
+def vehicles_endpoint():
+    # 1. Chiamiamo la logica
+    data = opzione_trasporto()
     
+    # 2. Restituiamo il JSON al frontend
+    return jsonify(data)
 
 if __name__ == '__main__':
     # host='0.0.0.0' è fondamentale per Docker!
