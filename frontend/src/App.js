@@ -23,7 +23,7 @@ function App() {
     return veicolo ? veicolo.label : id;
   };
 
-  // --- 1. CARICAMENTO VEICOLI ALL'AVVIO ---
+  // --- 1. CARICAMENTO VEICOLI ALL'AVVIO --- // solo visualizzazione
   useEffect(() => {
   const fetchVeicoli = async () => {
     try {
@@ -108,7 +108,7 @@ function App() {
             <div className="grid grid-cols-4 gap-2">
                 {veicoli.length > 0 ? (
                     veicoli.map((v) => {
-                        const isSelected = mezzoSelezionato === v.id;
+                        const isSelected = mezzoSelezionato === v.id; // <- mi serve questo
                         const bgColor = colorMap[v.color] || '#4b5563'; 
                         
                         return (
@@ -177,7 +177,14 @@ function App() {
                         <span className="font-bold text-blue-400">{datiPercorso.tempo_testo}</span>
                     </div>
                 )}
-            </div>
+                {/* --- NUOVA PARTE PER LE EMISSIONI --- */}
+                {datiPercorso.emissioni_co2 && (
+                    <div className="flex justify-between items-center text-lg text-white">
+                        <span>🌍 CO2 emessa:</span>
+                        <span className="font-bold text-orange-400">{datiPercorso.emissioni_co2}</span>
+                    </div>
+                )}
+              </div>
           </div>
         )}
 

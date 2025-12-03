@@ -4,6 +4,7 @@ import os
 from flask import Flask, jsonify, request
 import maps
 from mezzo import opzione_trasporto
+import calcoloCO2
 # Legge la variabile dal sistema operativo del container
 API_KEY = os.environ.get("GOOGLE_API_KEY") 
 
@@ -22,12 +23,24 @@ def calcola_percorso():
     dati = request.json
     partenza = dati.get('start')
     arrivo = dati.get('end')
+    mezzo_scelto = dati.get('mezzo')  
+
+    
 
     if not partenza or not arrivo:
         return jsonify({"errore": "Mancano indirizzi"}), 400
 
     # Chiamo la funzione che parla con Google
     risultato = maps.get_google_distance(partenza, arrivo)
+    distanza_metri = risultato.get('distanza_valore', 0)
+    distanza_km = distanza_metri / 1000.0
+
+    emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo_scelto) # praticamente dovrei chiamare la funzione calcoloCO2
+    if mezzo_scelto in ['car', 'public_bus']:
+        risultato['emissioni_co2'] = f"{emissioni} kg di CO2"
+    else:
+        risultato['emissioni_co2'] = emissioni
+   
 
     if risultato:
         return jsonify(risultato)
