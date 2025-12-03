@@ -33,7 +33,13 @@ def opzione_trasporto():
             "icon": "🚌",
             "color": "bg-orange-500",
             "action_url": "/api/v1/bus"
-        }
+        },
+    {       "id": "veicolo_elettrico",
+             "label": "Veicolo Elettrico",
+            "icon": "🔋",
+            "color": "bg-yellow-500",
+            "action_url": "/api/v1/electric_vehicle"
+        },
     ]
     
     return options
