@@ -1,0 +1,14 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "scrypt:32768:8:1$i4OU6Y8zlateaTCB$615eac6f7f050482bcdc4da4ade5e57f55074ded3a473845afeb2a5a55ddfd47698fc2dc59389c59a98d880f1e77bc9e89a0aa1bcb251548ef6d3e190819315b",
+    "role": "superuser",
+    "created_at": "2025-12-06T17:24:53.800599"
+  },
+  "paolo": {
+    "username": "paolo",
+    "password": "scrypt:32768:8:1$CIlogUFNnqLiOktV$ce07acb72f457ec7fb3b22367ec6d503f2b856d95b7c9fc2caa1c71823101148f4094cc0eb0df3b0287e5dd2a18d32864bcdb4be25c65098470ab55ebcef8523",
+    "role": "utente",
+    "created_at": "2025-12-06T17:24:53.982002"
+  }
+}
