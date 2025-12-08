@@ -4,6 +4,7 @@ import maps
 import calcoloCO2
 from mezzo import opzione_trasporto
 import login as auth_service # Importiamo il modulo corretto
+import storico
 
 app = Flask(__name__)
 app.secret_key = "chiave-segreta-super-sicura"
@@ -57,39 +58,65 @@ def vehicles():
 @app.route('/api/navigazione', methods=['POST'])
 def navigazione():
     if not session.get('username'):
-        return jsonify({"ok": False, "errore": "Login richiesto"}), 401 # se non loggato
+        return jsonify({"ok": False, "errore": "Login richiesto"}), 401 # se non loggato loggati
 
     data = request.get_json() or {}
     start, end = data.get('start'), data.get('end')
-    mezzo = data.get('mezzo', 'car') # Default auto
+    mezzo = data.get('mezzo', 'car')
 
     if not start or not end:
-        return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400
+        return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400 # se mancano gli indirizzi
 
-   
-    route = maps.get_google_distance(start, end) # questo me lo fornisce sempre in distanza di automobili
+    route = maps.get_google_distance(start, end)
     
     if not route:
         return jsonify({"ok": False, "errore": "Percorso non trovato"}), 400
 
-    distanza_km = route.get('distanza_valore', 0) / 1000.0
-    
-    # 2. gestioni emissioni
+    distanza_km = route.get('distanza_valore', 0) / 1000.0 # converti in km
+
+# calcolo delle emissioni di CO2
+
     if mezzo in ['bike', 'piedi']:
         emissioni = 0
     else:
-            emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo)
+        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo) #
 
+# salvo nello storico il viaggio
+
+    storico.registra_viaggio(
+        username=session['username'],
+        co2=emissioni,
+        km=distanza_km,
+        mezzo=mezzo,
+        start=route.get('start_address'), 
+        end=route.get('end_address')      
+    )
 
     return jsonify({
         "ok": True,
         "start_address": route.get('start_address'),
         "end_address": route.get('end_address'),
         "distanza_testo": route.get('distanza_testo'),
-        # Se è 0, scriviamo "0 kg", altrimenti il valore calcolato
         "emissioni_co2": f"{emissioni:.2f} kg di CO₂" if isinstance(emissioni, (int, float)) else str(emissioni),
         "mezzo_scelto": mezzo
     })
+
+
+@app.route('/api/wrapped', methods=['GET']) 
+def api_wrapped():
+    if not session.get('username'):
+        return jsonify({"ok": False, "errore": "Login richiesto"}), 401
+
+    stats = storico.genera_wrapped(session['username'])
+
+    if not stats:
+        return jsonify({"ok": False, "messaggio": "Nessun viaggio registrato"}), 404
+
+    return jsonify({"ok": True, "dati": stats})
+
+
+
+
 if __name__ == '__main__':
     print("🚀 Server EcoRoute attivo su http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)

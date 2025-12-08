@@ -1,1 +1,36 @@
-{}
+{
+    "marco": [
+        {
+            "data": "2025-12-08T09:12:39.855984",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-08T09:13:43.963611",
+            "co2": 105.989,
+            "km": 883.245,
+            "mezzo": "car",
+            "start": "Milano MI, Italia",
+            "end": "Bari BA, Italia"
+        },
+        {
+            "data": "2025-12-08T09:14:03.212714",
+            "co2": 60.026,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-08T09:14:17.129513",
+            "co2": 0.0,
+            "km": 456.015,
+            "mezzo": "veicolo_elettrico",
+            "start": "Bari BA, Italia",
+            "end": "Roma RM, Italia"
+        }
+    ]
+}
