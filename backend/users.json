@@ -1,0 +1,17 @@
+{
+    "admin": {
+        "password": "adminpass",
+        "role": "superuser",
+        "username": "admin"
+    },
+    "paolo": {
+        "password": "password",
+        "role": "utente",
+        "username": "paolo"
+    },
+    "marco": {
+        "username": "marco",
+        "password": "sedia",
+        "role": "utente"
+    }
+}
