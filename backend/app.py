@@ -9,12 +9,12 @@ import storico
 app = Flask(__name__)
 app.secret_key = "chiave-segreta-super-sicura"
 
-# --- CONFIGURAZIONE FONDAMENTALE PER IL LOGIN ---
+# config log
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['SESSION_COOKIE_SECURE'] = False # False perché siamo su localhost (http)
-app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = False #siamo in locale non serve il protocollo https
+app.config['SESSION_COOKIE_HTTPONLY'] = True 
 
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) # permettiamo al frontend di comunicare con il backend
 
 # questa gestisce il login e  la registrazione
 @app.route('/api/login', methods=['POST']) 
@@ -57,40 +57,40 @@ def vehicles():
 
 @app.route('/api/navigazione', methods=['POST'])
 def navigazione():
-    if not session.get('username'):
-        return jsonify({"ok": False, "errore": "Login richiesto"}), 401 # se non loggato loggati
-
+    # Permette il calcolo anche ad utenti non loggati
+    
     data = request.get_json() or {}
     start, end = data.get('start'), data.get('end')
     mezzo = data.get('mezzo', 'car')
 
     if not start or not end:
-        return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400 # se mancano gli indirizzi
+        return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400
 
     route = maps.get_google_distance(start, end)
     
     if not route:
         return jsonify({"ok": False, "errore": "Percorso non trovato"}), 400
 
-    distanza_km = route.get('distanza_valore', 0) / 1000.0 # converti in km
+    distanza_km = route.get('distanza_valore', 0) / 1000.0
 
-# calcolo delle emissioni di CO2
-
+    # calcolo delle emissioni di CO2
     if mezzo in ['bike', 'piedi']:
         emissioni = 0
     else:
-        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo) #
+        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo)
 
-# salvo nello storico il viaggio
-
-    storico.registra_viaggio(
-        username=session['username'],
-        co2=emissioni,
-        km=distanza_km,
-        mezzo=mezzo,
-        start=route.get('start_address'), 
-        end=route.get('end_address')      
-    )
+    # Tentiamo di salvare solo se l'utente è loggato
+    current_username = session.get('username') 
+    
+    if current_username: 
+        storico.registra_viaggio(
+            username=current_username,
+            co2=emissioni,
+            km=distanza_km,
+            mezzo=mezzo,
+            start=route.get('start_address'), 
+            end=route.get('end_address')      
+        )
 
     return jsonify({
         "ok": True,
@@ -98,23 +98,28 @@ def navigazione():
         "end_address": route.get('end_address'),
         "distanza_testo": route.get('distanza_testo'),
         "emissioni_co2": f"{emissioni:.2f} kg di CO₂" if isinstance(emissioni, (int, float)) else str(emissioni),
-        "mezzo_scelto": mezzo
+        "mezzo_scelto": mezzo,
+        "is_logged": bool(current_username)
     })
 
-
 # rotta per il wrapped
-
-@app.route('/api/wrapped', methods=['GET']) 
-def api_wrapped():
-    if not session.get('username'):
-        return jsonify({"ok": False, "errore": "Login richiesto"}), 401 # se non loggato loggati
-
-    stats = storico.genera_wrapped(session['username']) # algoritmo di storico.py
+@app.route('/api/wrapped', defaults={'username': None}, methods=['GET'])
+@app.route('/api/wrapped/<username>', methods=['GET'])
+def api_wrapped(username):
+    current_username = session.get('username')
+    if not current_username:
+        return jsonify({"ok": False, "errore": "Accesso negato. Devi effettuare il login per vedere le statistiche."}), 401 # cioe devi essere loggato
+    
+    
+    target_user = username if username else current_username # cioe o di un utente selezionato o di noi stessi
+    
+    stats = storico.genera_wrapped(target_user) # algoritmo di storico.py, una volta determinato chi e l'user
 
     if not stats:
-        return jsonify({"ok": False, "messaggio": "Nessun viaggio registrato"}), 404 # se e vuoto
+        return jsonify({"ok": False, "messaggio": f"Nessun dato trovato per {target_user}"}), 404 # se non sono presenti dati
 
-    return jsonify({"ok": True, "dati": stats}) # altrimenti droppalo letsgo
+
+    return jsonify({"ok": True, "dati": stats, "target": target_user})
 
 
 # rotta per cercare utenti 
@@ -122,18 +127,6 @@ def api_wrapped():
 def cerca_utenti():
     nomi = storico.lista_utenti_con_dati()
     return jsonify({"ok": True, "utenti": nomi})
-
-
-
-# per vedere il wrapped di un utente specifico
-@app.route('/api/wrapped/<target_user>', methods=['GET'])
-def wrapped_utente_specifico(target_user):
-    stats = storico.genera_wrapped(target_user) # algoritmo di storico.py
-    
-    if not stats:
-        return jsonify({"ok": False, "messaggio": "Nessun dato per questo utente"}), 404 # se e vuoto
-        
-    return jsonify({"ok": True, "dati": stats}) # altrimenti droppalo letsgosky
 
 
 # rotta per leggere tutti gli utenti
