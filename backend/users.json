@@ -13,5 +13,10 @@
         "username": "marco",
         "password": "sedia",
         "role": "utente"
+    },
+    "licia": {
+        "username": "licia",
+        "password": "licia",
+        "role": "utente"
     }
 }

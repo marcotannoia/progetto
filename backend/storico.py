@@ -62,5 +62,10 @@ def genera_wrapped(username):
         "totale_km": round(totale_km, 2),
         "numero_viaggi": numero_viaggi,
         "mezzo_preferito": mezzo_preferito,
-        "ultimo_viaggio": viaggi[-1]['data'] # Utile per dire "dal tuo ultimo viaggio..."
+        "ultimo_viaggio": viaggi[-1]['data'] 
     }
+
+def leggi_tutti_utenti():
+    """Restituisce la lista di tutti gli username"""
+    db = carica_db()
+    return list(db.keys())

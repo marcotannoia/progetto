@@ -102,20 +102,49 @@ def navigazione():
     })
 
 
+# rotta per il wrapped
+
 @app.route('/api/wrapped', methods=['GET']) 
 def api_wrapped():
     if not session.get('username'):
-        return jsonify({"ok": False, "errore": "Login richiesto"}), 401
+        return jsonify({"ok": False, "errore": "Login richiesto"}), 401 # se non loggato loggati
 
-    stats = storico.genera_wrapped(session['username'])
+    stats = storico.genera_wrapped(session['username']) # algoritmo di storico.py
 
     if not stats:
-        return jsonify({"ok": False, "messaggio": "Nessun viaggio registrato"}), 404
+        return jsonify({"ok": False, "messaggio": "Nessun viaggio registrato"}), 404 # se e vuoto
 
-    return jsonify({"ok": True, "dati": stats})
+    return jsonify({"ok": True, "dati": stats}) # altrimenti droppalo letsgo
+
+
+# rotta per cercare utenti 
+@app.route('/api/utenti/cerca', methods=['GET'])
+def cerca_utenti():
+    nomi = storico.lista_utenti_con_dati()
+    return jsonify({"ok": True, "utenti": nomi})
 
 
 
+# per vedere il wrapped di un utente specifico
+@app.route('/api/wrapped/<target_user>', methods=['GET'])
+def wrapped_utente_specifico(target_user):
+    stats = storico.genera_wrapped(target_user) # algoritmo di storico.py
+    
+    if not stats:
+        return jsonify({"ok": False, "messaggio": "Nessun dato per questo utente"}), 404 # se e vuoto
+        
+    return jsonify({"ok": True, "dati": stats}) # altrimenti droppalo letsgosky
+
+
+# rotta per leggere tutti gli utenti
+@app.route('/api/utenti', methods=['GET'])
+def get_utenti():
+    try:
+        lista = storico.leggi_tutti_utenti()
+        return jsonify({"ok": True, "utenti": lista})
+    except:
+        return jsonify({"ok": False, "utenti": []})
+    
 
 if __name__ == '__main__':
     print("🚀 Server EcoRoute attivo su http://localhost:5000")
