@@ -75,7 +75,7 @@ def navigazione():
     distanza_km = route.get('distanza_valore', 0) / 1000.0
 
     # calcolo delle emissioni di CO2
-    if mezzo in ['bike', 'piedi']:
+    if mezzo in ['bike', 'piedi', 'veicolo_elettrico']:
         emissioni = 0
     else:
         emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo)

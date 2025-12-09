@@ -25,6 +25,14 @@
             "mezzo": "veicolo_elettrico",
             "start": "21100 Varese VA, Italia",
             "end": "Bergamo BG, Italia"
+        },
+        {
+            "data": "2025-12-09T12:00:00.056228",
+            "co2": 0.0,
+            "km": 99.724,
+            "mezzo": "veicolo_elettrico",
+            "start": "21100 Varese VA, Italia",
+            "end": "Bergamo BG, Italia"
         }
     ]
 }
