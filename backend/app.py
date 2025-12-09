@@ -21,14 +21,16 @@ CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) # permet
 @app.route('/api/login', methods=['POST']) 
 def api_login():
     data = request.get_json() or {}
-    user = auth_service.login_user(data.get('username'), data.get('password')) # praticamente vedo se esise nel caso prendo, vedeo se esiste l'utente e che ruoli ha
+    user = auth_service.login_user(data.get('username'), data.get('password'))
     if user:
         session.permanent = True
         session['username'] = user['username']
-        session['ruolo'] = 'admin' if user.get('role') == 'superuser' else 'utente' # eventuale assegnaiozione ruolo
-        return jsonify({"ok": True, "username": user['username'], "ruolo": session['ruolo']})
+        session['ruolo'] = 'admin' if user.get('role') == 'superuser' else 'utente'
+        session['regione'] = user.get('regione', '') # <--- SALVIAMO LA REGIONE IN SESSIONE
+        # Restituiamo anche la regione al frontend
+        return jsonify({"ok": True, "username": user['username'], "ruolo": session['ruolo'], "regione": user.get('regione', '')})
     
-    return jsonify({"ok": False, "errore": "Credenziali errate"}), 401 # in caso di errore
+    return jsonify({"ok": False, "errore": "Credenziali errate"}), 401
 
 @app.route('/api/registrati', methods=['POST'])
 def api_registrati():
@@ -47,9 +49,9 @@ def api_logout():
 def api_me():
     user = session.get('username')
     if user:
-        return jsonify({"ok": True, "username": user, "ruolo": session.get('ruolo')})
+        # Restituiamo anche qui la regione salvata in sessione
+        return jsonify({"ok": True, "username": user, "ruolo": session.get('ruolo'), "regione": session.get('regione', '')})
     return jsonify({"ok": False}), 401
-
 
 # rotte per i veicoli e la navigazione
 @app.route('/api/veicoli', methods=['GET'])
@@ -134,9 +136,11 @@ def cerca_utenti():
 @app.route('/api/utenti', methods=['GET'])
 def get_utenti():
     try:
-        lista = storico.leggi_tutti_utenti()
+        # Usiamo la nuova funzione di login.py invece di storico
+        lista = auth_service.get_users_list() 
         return jsonify({"ok": True, "utenti": lista})
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({"ok": False, "utenti": []})
     
 

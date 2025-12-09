@@ -4,31 +4,22 @@
         "role": "superuser",
         "username": "admin"
     },
-    "paolo": {
-        "password": "password",
-        "role": "utente",
-        "username": "paolo"
-    },
     "marco": {
         "username": "marco",
         "password": "sedia",
+        "regione": "puglia",
+        "role": "utente"
+    },
+    "daniele": {
+        "username": "daniele",
+        "password": "sedia",
+        "regione": "puglia",
         "role": "utente"
     },
     "licia": {
         "username": "licia",
-        "password": "licia",
-        "role": "utente"
-    },
-    "marcota": {
-        "username": "marcota",
-        "password": "sediam",
-        "regione": "puglia",
-        "role": "utente"
-    },
-    "marcot": {
-        "username": "marcot",
         "password": "sedia",
-        "regione": "puglia",
+        "regione": "molise",
         "role": "utente"
     }
 }

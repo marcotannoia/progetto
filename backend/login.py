@@ -52,3 +52,15 @@ def register_user(username, password, regione):
     }
     salvaDB(db) # Salvataggio permanente
     return True, "Registrato con successo"
+# ... codice esistente ...
+
+def get_users_list():
+    """Restituisce una lista di dizionari con username e regione"""
+    db = caricaDB()
+    lista = []
+    for user_key, user_data in db.items():
+        lista.append({
+            "username": user_data.get("username"),
+            "regione": user_data.get("regione", "").lower() # Salviamo in minuscolo per confronti facili
+        })
+    return lista
