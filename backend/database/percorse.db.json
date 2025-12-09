@@ -11,60 +11,20 @@
     ],
     "licia": [
         {
-            "data": "2025-12-08T20:05:16.048342",
-            "co2": 60.026,
-            "km": 882.738,
-            "mezzo": "public_bus",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-08T20:05:24.358982",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-08T20:08:53.431712",
-            "co2": 60.026,
-            "km": 882.738,
-            "mezzo": "public_bus",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-08T20:16:57.180008",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-08T20:29:53.611754",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-08T20:30:22.789374",
+            "data": "2025-12-09T11:53:27.660255",
             "co2": 0.0,
-            "km": 671.382,
+            "km": 99.724,
             "mezzo": "bike",
-            "start": "Roma RM, Italia",
-            "end": "Torino TO, Italia"
+            "start": "21100 Varese VA, Italia",
+            "end": "Bergamo BG, Italia"
         },
         {
-            "data": "2025-12-08T20:51:52.925860",
+            "data": "2025-12-09T11:53:32.970157",
             "co2": 0.0,
-            "km": 456.015,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Roma RM, Italia"
+            "km": 99.724,
+            "mezzo": "veicolo_elettrico",
+            "start": "21100 Varese VA, Italia",
+            "end": "Bergamo BG, Italia"
         }
     ]
 }

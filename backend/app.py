@@ -5,6 +5,7 @@ import calcoloCO2
 from mezzo import opzione_trasporto
 import login as auth_service # Importiamo il modulo corretto
 import storico
+from alberiCO2 import alberiCO2
 
 app = Flask(__name__)
 app.secret_key = "chiave-segreta-super-sicura"
@@ -139,6 +140,29 @@ def get_utenti():
         return jsonify({"ok": False, "utenti": []})
     
 
+# richiamo funzione per calcolo alberi che assorbono CO2
+@app.route('/api/calcolo-alberi', methods=['POST'])
+def api_calcolo_alberi():
+    data = request.get_json() or {}
+    co2_input = data.get('co2')
+    
+    if co2_input is None:
+        return jsonify({"ok": False, "errore": "Valore CO2 mancante"}), 400
+    
+    try:
+        co2_valore = float(co2_input)
+    except ValueError:
+        return jsonify({"ok": False, "errore": "Il valore CO2 deve essere un numero"}), 400
+
+    # Ora la funzione sarà trovata grazie all'import
+    giorni_necessari = alberiCO2(co2_valore)
+
+    return jsonify({
+        "ok": True,
+        "co2_kg": co2_valore,
+        "giorni_per_albero": giorni_necessari,
+        "messaggio": f"Un albero impiegherebbe circa {giorni_necessari} giorni per assorbire questa CO₂."
+    })
 if __name__ == '__main__':
     print("🚀 Server EcoRoute attivo su http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)
