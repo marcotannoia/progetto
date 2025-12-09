@@ -58,5 +58,65 @@
             "start": "21100 Varese VA, Italia",
             "end": "Bergamo BG, Italia"
         }
+    ],
+    "marcota": [
+        {
+            "data": "2025-12-09T15:51:27.537794",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "piedi",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-09T15:51:30.482814",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-09T15:51:33.147775",
+            "co2": 60.026,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        }
+    ],
+    "marcot": [
+        {
+            "data": "2025-12-09T15:52:21.406870",
+            "co2": 60.026,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-09T15:52:24.588515",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "veicolo_elettrico",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-09T15:52:27.719845",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "bike",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-09T15:52:46.485694",
+            "co2": 69.115,
+            "km": 575.958,
+            "mezzo": "car",
+            "start": "Roma RM, Italia",
+            "end": "Milano MI, Italia"
+        }
     ]
 }

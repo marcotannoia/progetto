@@ -4,7 +4,7 @@ const API_BASE = 'http://localhost:5000';
 
 function Login({ setUser }) {
   // Stati per il form
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ username: '', password: '', regione: '' });
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
 
@@ -62,6 +62,14 @@ function Login({ setUser }) {
               placeholder="Password" 
               value={form.password} 
               onChange={e => setForm({...form, password: e.target.value})} 
+            />
+          </div>
+          <div>
+            <input 
+              className="w-full p-3 bg-gray-700 rounded text-white border border-gray-600 focus:border-blue-500 outline-none" 
+              placeholder="Regione" 
+              value={form.regione} 
+              onChange={e => setForm({...form, regione: e.target.value})} 
             />
           </div>
 

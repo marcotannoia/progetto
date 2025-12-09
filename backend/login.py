@@ -38,15 +38,16 @@ def login_user(username, password):
         return user
     return None
 
-def register_user(username, password):
+def register_user(username, password, regione):
     db = caricaDB()
     if username in db:
         return False, "Username già in uso"
     
     # Aggiungi nuovo utente
-    db[username] = {
+    db[username] = {    
         "username": username,
         "password": password,
+        "regione": regione,
         "role": "utente"
     }
     salvaDB(db) # Salvataggio permanente

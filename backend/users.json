@@ -18,5 +18,17 @@
         "username": "licia",
         "password": "licia",
         "role": "utente"
+    },
+    "marcota": {
+        "username": "marcota",
+        "password": "sediam",
+        "regione": "puglia",
+        "role": "utente"
+    },
+    "marcot": {
+        "username": "marcot",
+        "password": "sedia",
+        "regione": "puglia",
+        "role": "utente"
     }
 }

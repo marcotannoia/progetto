@@ -3,7 +3,7 @@ from flask_cors import CORS
 import maps
 import calcoloCO2
 from mezzo import opzione_trasporto
-import login as auth_service # Importiamo il modulo corretto
+import login as auth_service 
 import storico
 from alberiCO2 import alberiCO2
 
@@ -33,7 +33,7 @@ def api_login():
 @app.route('/api/registrati', methods=['POST'])
 def api_registrati():
     data = request.get_json() or {}
-    ok, msg = auth_service.register_user(data.get('username'), data.get('password'))
+    ok, msg = auth_service.register_user(data.get('username'), data.get('password'), data.get('regione')) # aggiunto regione
     return jsonify({"ok": ok, "messaggio": msg}), 201 if ok else 409
 
 @app.route('/api/logout', methods=['POST'])
