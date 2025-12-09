@@ -113,15 +113,12 @@ function NewTrip({ user }) {
             <p className="text-3xl font-bold text-red-500 my-2">{risultato.emissioni_co2}</p>
             
             <div className="mt-6 text-left space-y-2 border-t border-gray-600 pt-4">
-              <p className="font-bold">Impatto ambientale:</p>
               <ul className="list-disc pl-5 text-gray-300">
-                <li>0.001% of a flight ✈️</li>
-                
-                {/* Visualizza il messaggio dinamico sugli alberi SOLO se esiste */}
+      
                 {messaggioAlberi ? (
                     <li>{messaggioAlberi} 🌳</li>
                 ) : (
-                    // Opzionale: Se le emissioni sono 0 (es. bici), non mostriamo nulla o un messaggio positivo
+
                     !isNaN(parseFloat(risultato.emissioni_co2)) && <li>Gli alberi possono respirare!</li>
                 )}
               </ul>
