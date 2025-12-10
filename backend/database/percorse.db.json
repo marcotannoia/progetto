@@ -25,6 +25,78 @@
             "mezzo": "car",
             "start": "Bari BA, Italia",
             "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T11:51:26.204773",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T11:51:35.687495",
+            "co2": 60.026,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T11:51:38.301723",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "veicolo_elettrico",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:02:22.516153",
+            "co2": 1371.267,
+            "km": 11427.224,
+            "mezzo": "car",
+            "start": "Distretto di B\u00e1ru\u00e8, Mozambico",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:04:03.795885",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "piedi",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:11:47.011878",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "bike",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:11:47.235234",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "bike",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:11:48.489692",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T12:13:56.498061",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
         }
     ],
     "daniele": [

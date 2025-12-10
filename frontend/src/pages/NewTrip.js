@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Intestazione from '../components/Intestazione';
+import './NewTrip.css';
 
 const API_BASE = 'http://localhost:5000';
 
@@ -55,77 +57,105 @@ function NewTrip({ user }) {// come semre inizalizzo gli stati
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">ECOTRACK ✏️</h1>
-      
-      {!user && (
-        <div className="text-center mb-6">
-          <Link to="/login" className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded font-bold transition">
-            Accedi o Registrati per salvare i viaggi
-          </Link>
-        </div>
-      )}
+    <div className="newtrip-page">
+      <Intestazione />
 
-      {/* INPUT FORM */}
-      <div className="space-y-4 max-w-md mx-auto">
-        <input 
-          className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white" 
-          placeholder="LUOGO DI PARTENZA" 
-          value={percorso.start} onChange={e => setPercorso({...percorso, start: e.target.value})} 
-        />
-        <input 
-          className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white" 
-          placeholder="LUOGO DI ARRIVO" 
-          value={percorso.end} onChange={e => setPercorso({...percorso, end: e.target.value})} 
-        />
-
-        <div className="flex gap-2 justify-center py-4">
-          {veicoli.map(v => (
-            <button key={v.id} onClick={() => setMezzoScelto(v.id)}
-              className={`p-3 rounded-lg text-2xl transition ${mezzoScelto === v.id ? 'bg-blue-600' : 'bg-gray-700'}`}>
-              {v.icon}
-            </button>
-          ))}
+      <section className="newtrip-hero">
+        <div className="intro">
+          <div>
+            <p className="eyebrow">Pianifica in equilibrio</p>
+            <h2>Parti, arrivi e calcola al centro della scena.</h2>
+            <p className="subtext">
+              Box ampi e simmetrici, pulsante in evidenza e scelta del mezzo sotto il tasto.
+            </p>
+          </div>
+          {!user && (
+            <div className="cta-box">
+              <span className="cta-label">Nuovo qui?</span>
+              <Link to="/login">Accedi o registrati per salvare i viaggi</Link>
+            </div>
+          )}
         </div>
 
-        <button onClick={calcola} className="w-full py-3 bg-green-600 hover:bg-green-500 rounded-lg font-bold text-lg uppercase tracking-widest transition transform hover:scale-[1.02]">
-          CALCOLA
-        </button>
-      </div>
+        <div className="form-card">
+          <div className="input-grid">
+            <div className="field">
+              <label>Luogo di partenza</label>
+              <input
+                className="trip-input"
+                placeholder="Inserisci la città o l'indirizzo"
+                value={percorso.start}
+                onChange={e => setPercorso({ ...percorso, start: e.target.value })}
+              />
+            </div>
+            <div className="field">
+              <label>Luogo di arrivo</label>
+              <input
+                className="trip-input"
+                placeholder="Inserisci la destinazione"
+                value={percorso.end}
+                onChange={e => setPercorso({ ...percorso, end: e.target.value })}
+              />
+            </div>
+          </div>
 
-      {/* RISULTATI */}
+          <button onClick={calcola} className="primary-button">
+            Calcola
+          </button>
+
+          <div className="vehicles">
+            <p className="section-subtitle">Scegli il mezzo</p>
+            <div className="vehicle-grid">
+              {veicoli.map(v => (
+                <button
+                  key={v.id}
+                  onClick={() => setMezzoScelto(v.id)}
+                  className={`vehicle-button ${mezzoScelto === v.id ? 'selected' : ''}`}
+                >
+                  <span className="vehicle-icon">{v.icon}</span>
+                  <span className="vehicle-label">{v.nome || v.id}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {risultato && (
-        <div className="mt-8 p-6 bg-gray-800 rounded-xl border-2 border-white max-w-md mx-auto fade-in">
-          <div className="text-center">
-            <h2 className="text-xl font-bold mb-4">{risultato.start_address} <br/>⬇<br/> {risultato.end_address}</h2>
-            
-            <p className="text-gray-400 text-sm">CO2 CREATED:</p>
-            <p className="text-3xl font-bold text-red-500 my-2">{risultato.emissioni_co2}</p>
-            
-            <div className="mt-6 text-left space-y-2 border-t border-gray-600 pt-4">
-              <ul className="list-disc pl-5 text-gray-300">
-      
-                {messaggioAlberi ? (
-                    <li>{messaggioAlberi} 🌳</li>
-                ) : (
+        <section className="results-card">
+          <div className="results-header">
+            <h3>{risultato.start_address}</h3>
+            <span className="arrow">⬇</span>
+            <h3>{risultato.end_address}</h3>
+          </div>
 
-                    !isNaN(parseFloat(risultato.emissioni_co2)) && <li>Gli alberi possono respirare!</li>
-                )}
-              </ul>
+          <div className="results-body">
+            <div className="result-highlight">
+              <p>CO₂ stimata</p>
+              <span className="value">{risultato.emissioni_co2}</span>
+            </div>
+
+            <div className="tree-card">
+              <div className="tree-icon">🌳</div>
+              <div>
+                <p className="tree-title">Alberi e compensazione</p>
+                <p className="tree-text">
+                  {messaggioAlberi
+                    ? messaggioAlberi
+                    : (!isNaN(parseFloat(risultato.emissioni_co2)) && 'Gli alberi possono respirare! Continua così.')}
+                </p>
+              </div>
             </div>
 
             {!user ? (
-              <p className="mt-6 text-yellow-400 font-medium">
-                Viaggio calcolato, ma non salvato. <Link to="/login" className="underline hover:text-yellow-300">Accedi</Link> per salvare i progressi!
+              <p className="result-note">
+                Viaggio calcolato, ma non salvato. <Link to="/login">Accedi</Link> per salvare i progressi!
               </p>
             ) : (
-              <p className="mt-6 text-green-400 font-medium">
-                Viaggio salvato con successo nel tuo storico!
-              </p>
+              <p className="result-note success">Viaggio salvato con successo nel tuo storico!</p>
             )}
-            <p className="mt-6 font-bold underline cursor-pointer">How can you do better?</p> 
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

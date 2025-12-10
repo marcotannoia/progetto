@@ -28,21 +28,21 @@ function App() {
   // NUOVA LOGICA DI FLUSSO (La pagina di calcolo è la home per tutti)
   return (
     <Router>
-      <div className="min-h-screen bg-gray-900 text-white pb-20">
-        <Routes>
-          
-
-          <Route path="/" element={<NewTrip user={user} />} /> {/* 1. Pagina principale di calcolo viaggio */}
-          
-          {/* 2. Pagina Login/Registrazione */}
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />
-          
-          {/* 3. Rotte protette (Accessibili solo se loggato, altrimenti redirect a Login) */}
-          <Route path="/cerca" element={user ? <HomeSearch user={user} /> : <Navigate to="/login" />} />
-          <Route path="/profilo" element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} />
-          
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+      <div className="app-shell">
+        <main className="page-body">
+          <Routes>
+            <Route path="/" element={<NewTrip user={user} />} /> {/* 1. Pagina principale di calcolo viaggio */}
+            
+            {/* 2. Pagina Login/Registrazione */}
+            <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />
+            
+            {/* 3. Rotte protette (Accessibili solo se loggato, altrimenti redirect a Login) */}
+            <Route path="/cerca" element={user ? <HomeSearch user={user} /> : <Navigate to="/login" />} />
+            <Route path="/profilo" element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} />
+            
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
         
         {/* La Navbar è visibile solo quando l'utente è loggato */}
         {user && <Navbar />}
