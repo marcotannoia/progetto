@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 
 const API_BASE = 'http://localhost:5000';
 
-function NewTrip({ user }) {
+function NewTrip({ user }) {// come semre inizalizzo gli stati
   const [percorso, setPercorso] = useState({ start: '', end: '' });
   const [mezzoScelto, setMezzoScelto] = useState('car');
   const [veicoli, setVeicoli] = useState([]);
-  
   const [risultato, setRisultato] = useState(null); 
-  // Nuovo stato per memorizzare il messaggio sugli alberi dal backend
   const [messaggioAlberi, setMessaggioAlberi] = useState(null);
 
   useEffect(() => {
@@ -19,13 +17,11 @@ function NewTrip({ user }) {
   }, []);
 
   const calcola = async () => {
-    // Resettiamo i risultati precedenti prima del nuovo calcolo
     setRisultato(null);
-    setMessaggioAlberi(null);
+    setMessaggioAlberi(null); // ogni volta cancello i mex precedenti
 
     try {
-      // 1. Prima chiamata: Calcolo Navigazione
-      const res = await fetch(`${API_BASE}/api/navigazione`, {
+      const res = await fetch(`${API_BASE}/api/navigazione`, {  // fetcho la rotta di calcolo
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -35,14 +31,8 @@ function NewTrip({ user }) {
       
       if (data.ok) {
         setRisultato(data);
-
-        // 2. Logica per chiamare la nuova API degli alberi
-        // "data.emissioni_co2" è una stringa (es: "12.50 kg di CO2") o un messaggio di testo.
-        // parseFloat legge i numeri all'inizio della stringa e si ferma al testo.
-        const co2Value = parseFloat(data.emissioni_co2);
-
-        // Se è un numero valido e maggiore di 0, chiamiamo la tua API
-        if (!isNaN(co2Value) && co2Value > 0) {
+        const co2Value = parseFloat(data.emissioni_co2); // leggo solo i numeri 
+          if (!isNaN(co2Value) && co2Value > 0) {
             try {
                 const treeRes = await fetch(`${API_BASE}/api/calcolo-alberi`, {
                     method: 'POST',
@@ -52,7 +42,7 @@ function NewTrip({ user }) {
                 const treeData = await treeRes.json();
                 
                 if (treeData.ok) {
-                    setMessaggioAlberi(treeData.messaggio); // Salviamo il messaggio ricevuto
+                    setMessaggioAlberi(treeData.messaggio); // salvo il messaggio 
                 }
             } catch (err) {
                 console.error("Errore nel calcolo alberi:", err);

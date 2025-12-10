@@ -10,57 +10,51 @@ DEFAULT_USERS = {
 }
 
 def caricaDB():
-    """Carica DB da file. Se non esiste o è corrotto, usa i default."""
-    if not os.path.exists(DB_FILE):
+    if not os.path.exists(DB_FILE): # provo a caricare il db altrimenti uso qelli di default giusto per farlo funzionare
         salvaDB(DEFAULT_USERS)
         return DEFAULT_USERS.copy()
     
     try:
-        with open(DB_FILE, 'r') as f:
+        with open(DB_FILE, 'r') as f: # accedo in lettura e nel caso carico altrimenti mando l'eccezione
             return json.load(f)
     except:
         return DEFAULT_USERS.copy()
 
 def salvaDB(db):
-    """Salva su file JSON"""
     try:
-        with open(DB_FILE, 'w') as f:
+        with open(DB_FILE, 'w') as f: # questa funzione salva nel database vero e proprio e ci scrivo dentro
             json.dump(db, f, indent=4)
     except Exception as e:
         print(f"Errore salvataggio DB: {e}")
 
-# --- API ---
 
-def login_user(username, password):
+def login_user(username, password): # funzione di login standard
     db = caricaDB()
     user = db.get(username)
     if user and user['password'] == password:
         return user
     return None
 
-def register_user(username, password, regione):
+def register_user(username, password, regione):# idem + patate per la registrazione
     db = caricaDB()
     if username in db:
         return False, "Username già in uso"
     
-    # Aggiungi nuovo utente
-    db[username] = {    
+    db[username] = {    # formato del nuovo utente 
         "username": username,
         "password": password,
         "regione": regione,
         "role": "utente"
     }
-    salvaDB(db) # Salvataggio permanente
+    salvaDB(db) 
     return True, "Registrato con successo"
-# ... codice esistente ...
 
-def get_users_list():
-    """Restituisce una lista di dizionari con username e regione"""
+def get_users_list(): # funzione per leggere tutti gli utenti, carico gli utenti e seleziono solo username e regione
     db = caricaDB()
     lista = []
     for user_key, user_data in db.items():
         lista.append({
             "username": user_data.get("username"),
-            "regione": user_data.get("regione", "").lower() # Salviamo in minuscolo per confronti facili
+            "regione": user_data.get("regione", "").lower() # li prendo minuscoli per prenderli tutti
         })
     return lista

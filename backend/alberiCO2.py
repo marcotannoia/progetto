@@ -2,3 +2,5 @@ def alberiCO2(co2_emessa):
     assorbimento_medio_giornaliero = 0.050
     tempo_assorbimento = co2_emessa / assorbimento_medio_giornaliero
     return round(tempo_assorbimento, 2)
+
+# con sta funzione mi calcolo approssimativamente quanto assorbe un piccolo ingenuo alberos

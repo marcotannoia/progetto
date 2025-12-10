@@ -1,13 +1,13 @@
-# Usa un'immagine base leggera di Python
-FROM python:3.9-slim
+#abbiamo scelto un immagine leggera
+FROM python:3.9-slim 
 
-# Imposta la cartella di lavoro dentro il container
+# la nostra workdir
 WORKDIR /app
 
-# Copia i file e installa le dipendenze
+# installa tutte le librerie 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 
-# Comando per avviare l'app (es. usando Flask)
+## comando per avviare il backend
 CMD ["python", "app.py"]

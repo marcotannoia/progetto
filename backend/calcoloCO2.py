@@ -1,6 +1,5 @@
 def calcoloCO2(distanza_km, mezzo):
-    # Le chiavi devono corrispondere agli 'id' in mezzo.py
-    emissioni_per_km = {
+    emissioni_per_km = { # valori medi di co2 in kg per km
         'car': 0.120,        
         'public_bus': 0.068, 
         'bike': 0.0,         

@@ -1,9 +1,5 @@
 def opzione_trasporto():
-    """
-    Restituisce una lista di dizionari con i dati dei mezzi.
-    Gli attributi "id", "label", "icon" e "color" sono consumati dal frontend.
-    L'attributo "action_url" è un endpoint di esempio.
-    """
+# va be quindi definisco i mezzi
     
     options = [
         {

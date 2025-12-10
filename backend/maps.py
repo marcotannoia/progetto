@@ -19,16 +19,14 @@ def get_google_distance(origin, destination): # prendo nel metodo destinazione e
         response = requests.get(endpoint, params=params)
         data = response.json()
 
-        # Controllo se Google ha trovato la strada
-        if data['status'] == 'OK':
-            # Prendo la prima strada (route) e la prima tappa (leg)
+        if data['status'] == 'OK': # vedo se le api hanno trovato la strada, scelgo la prima e prendo cio che mi interessa nel return
             percorso = data['routes'][0]['legs'][0]
             
             return {
-                "distanza_testo": percorso['distance']['text'],  # Es: "154 km"
-                "distanza_valore": percorso['distance']['value'], # Es: 154000 (metri)
-                "durata": percorso['duration']['text'],          # Es: "1 ora 40 min"
-                "start_address": percorso['start_address'],      # Indirizzo preciso trovato da Google
+                "distanza_testo": percorso['distance']['text'],  
+                "distanza_valore": percorso['distance']['value'],  # purtroppo me lo da in metri quindi poi lo convertiro
+                "durata": percorso['duration']['text'],          
+                "start_address": percorso['start_address'],      
                 "end_address": percorso['end_address']
             }
         else:
@@ -36,4 +34,4 @@ def get_google_distance(origin, destination): # prendo nel metodo destinazione e
             return None
 
     except Exception as e:
-        print(f"Errore connessione: {e}")
+        print(f"Errore connessione: {e}") # gestisco sta eccezione generale per farmi un idea 

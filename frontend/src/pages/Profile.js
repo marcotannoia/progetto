@@ -8,13 +8,12 @@ function Profile({ user, setUser }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Chiama la rotta generica /api/wrapped (che restituisce il proprio wrapped)
-    fetch(`${API_BASE}/api/wrapped`, { credentials: 'include' })
+    fetch(`${API_BASE}/api/wrapped`, { credentials: 'include' }) //fetcho i dati del wrapped
       .then(res => res.json())
       .then(data => { if (data.ok) setStats(data.dati); });
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = async () => { // funzione di logout
     await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
     setUser(null);
     navigate('/');
@@ -30,6 +29,13 @@ function Profile({ user, setUser }) {
 
         {stats ? (
           <div className="space-y-6 flex-grow">
+            
+            {/* NUOVO: Data Inizio Wrapped */}
+            <div className="p-3 bg-gray-700 rounded-lg border border-yellow-500">
+                <p className="text-sm font-bold uppercase text-gray-400">Statistiche del Mese dal</p>
+                <p className="text-xl font-extrabold text-yellow-300">{stats.data_inizio}</p>
+            </div>
+            
             {/* STATS DEL PROPRIO WRAPPED */}
             <div className="p-3 bg-gray-700 rounded-lg border border-green-500">
                 <p className="text-sm font-bold uppercase text-gray-400">CO2 Totale Prodotta</p>

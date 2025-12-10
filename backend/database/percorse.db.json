@@ -26,5 +26,23 @@
             "start": "Bari BA, Italia",
             "end": "Milano MI, Italia"
         }
+    ],
+    "daniele": [
+        {
+            "data": "2025-12-10T10:29:41.310530",
+            "co2": 60.026,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-10T10:30:12.788804",
+            "co2": 105.929,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        }
     ]
 }

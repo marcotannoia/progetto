@@ -31,8 +31,8 @@ function App() {
       <div className="min-h-screen bg-gray-900 text-white pb-20">
         <Routes>
           
-          {/* 1. Rotta principale: Calcola Viaggio (Accessibile a tutti) */}
-          <Route path="/" element={<NewTrip user={user} />} /> 
+
+          <Route path="/" element={<NewTrip user={user} />} /> {/* 1. Pagina principale di calcolo viaggio */}
           
           {/* 2. Pagina Login/Registrazione */}
           <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />

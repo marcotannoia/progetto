@@ -12,12 +12,13 @@ app.secret_key = "chiave-segreta-super-sicura"
 
 # config log
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['SESSION_COOKIE_SECURE'] = False #siamo in locale non serve il protocollo https
+app.config['SESSION_COOKIE_SECURE'] = False # siamo in locale non serve il protocollo https
 app.config['SESSION_COOKIE_HTTPONLY'] = True 
 
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) # permettiamo al frontend di comunicare con il backend
 
-# questa gestisce il login e  la registrazione
+# qui devo mettere tute le route che mi permettoo di richiamare le funzioni del backend e collegarle al frontend
+
 @app.route('/api/login', methods=['POST']) 
 def api_login():
     data = request.get_json() or {}
@@ -26,8 +27,9 @@ def api_login():
         session.permanent = True
         session['username'] = user['username']
         session['ruolo'] = 'admin' if user.get('role') == 'superuser' else 'utente'
-        session['regione'] = user.get('regione', '') # <--- SALVIAMO LA REGIONE IN SESSIONE
-        # Restituiamo anche la regione al frontend
+        session['regione'] = user.get('regione', '') 
+
+        
         return jsonify({"ok": True, "username": user['username'], "ruolo": session['ruolo'], "regione": user.get('regione', '')})
     
     return jsonify({"ok": False, "errore": "Credenziali errate"}), 401
@@ -35,55 +37,54 @@ def api_login():
 @app.route('/api/registrati', methods=['POST'])
 def api_registrati():
     data = request.get_json() or {}
-    ok, msg = auth_service.register_user(data.get('username'), data.get('password'), data.get('regione')) # aggiunto regione
+    ok, msg = auth_service.register_user(data.get('username'), data.get('password'), data.get('regione')) # ho messo anche la regione perche cosi faccio i suggerimenti nel homesearch
     return jsonify({"ok": ok, "messaggio": msg}), 201 if ok else 409
 
 @app.route('/api/logout', methods=['POST'])
 def api_logout():
     session.clear()
     return jsonify({"ok": True})
-# fine api login.register.logout
+
 
 # se refresho non perdo il login
 @app.route('/api/me', methods=['GET'])
 def api_me():
     user = session.get('username')
     if user:
-        # Restituiamo anche qui la regione salvata in sessione
         return jsonify({"ok": True, "username": user, "ruolo": session.get('ruolo'), "regione": session.get('regione', '')})
     return jsonify({"ok": False}), 401
+
 
 # rotte per i veicoli e la navigazione
 @app.route('/api/veicoli', methods=['GET'])
 def vehicles():
-    return jsonify(opzione_trasporto()) # restituisce le opzioni di trasporto disponibili
+    return jsonify(opzione_trasporto()) 
 
-@app.route('/api/navigazione', methods=['POST'])
+@app.route('/api/navigazione', methods=['POST']) # l'ho modificata per far cercare i viaggi anche agli utenti non loggati
 def navigazione():
-    # Permette il calcolo anche ad utenti non loggati
-    
-    data = request.get_json() or {}
+
+    data = request.get_json() or {} # qui prendo i dati che mi servono
     start, end = data.get('start'), data.get('end')
     mezzo = data.get('mezzo', 'car')
 
     if not start or not end:
         return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400
 
-    route = maps.get_google_distance(start, end)
+    route = maps.get_google_distance(start, end)  # grazie alle api in maps.py faccio il calcolo e letsgoky
     
     if not route:
         return jsonify({"ok": False, "errore": "Percorso non trovato"}), 400
 
     distanza_km = route.get('distanza_valore', 0) / 1000.0
 
-    # calcolo delle emissioni di CO2
+
     if mezzo in ['bike', 'piedi', 'veicolo_elettrico']:
         emissioni = 0
     else:
-        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo)
+        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo) #qua ho messo che mi serve sapere se ho emesso o no cosi dopo nel frotnend metto messaggi cariniS
 
-    # Tentiamo di salvare solo se l'utente è loggato
-    current_username = session.get('username') 
+
+    current_username = session.get('username') # prendo l'username corrente per salvare lo storico solo se loggato
     
     if current_username: 
         storico.registra_viaggio(
@@ -107,7 +108,7 @@ def navigazione():
 
 # rotta per il wrapped
 @app.route('/api/wrapped', defaults={'username': None}, methods=['GET'])
-@app.route('/api/wrapped/<username>', methods=['GET'])
+@app.route('/api/wrapped/<username>', methods=['GET']) # per quello di u utente ricercato
 def api_wrapped(username):
     current_username = session.get('username')
     if not current_username:
@@ -158,7 +159,6 @@ def api_calcolo_alberi():
     except ValueError:
         return jsonify({"ok": False, "errore": "Il valore CO2 deve essere un numero"}), 400
 
-    # Ora la funzione sarà trovata grazie all'import
     giorni_necessari = alberiCO2(co2_valore)
 
     return jsonify({
@@ -168,5 +168,5 @@ def api_calcolo_alberi():
         "messaggio": f"Un albero impiegherebbe circa {giorni_necessari} giorni per assorbire questa CO₂."
     })
 if __name__ == '__main__':
-    print("🚀 Server EcoRoute attivo su http://localhost:5000")
+    print("Server EcoRoute attivo su http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)

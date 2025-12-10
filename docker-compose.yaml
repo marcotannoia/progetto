@@ -1,65 +1,24 @@
 version: '3.8'
 
 services:
-  # ---------------------------------------------
-  # 1. DATABASE (PostgreSQL)
-  # ---------------------------------------------
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: miodb
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  # ---------------------------------------------
-  # 2. GESTIONE DB (Adminer - Interfaccia Web)
-  # ---------------------------------------------
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - "8080:8080" # Vai su localhost:8080 per gestire il DB
-    depends_on:
-      - db
-
-  # ---------------------------------------------
-  # 3. BACKEND (Python)
-  # ---------------------------------------------
+  # backend
   backend:
     build: ./backend
     ports:
       - "5000:5000"
     volumes:
-      - ./backend:/app # "Volume magico": modifichi il codice e si aggiorna nel container
+      - ./backend:/app       
     environment:
-      # Passiamo le credenziali al codice Python tramite variabili d'ambiente
-      - DB_HOST=db       # IMPORTANTE: qui si usa il nome del servizio "db", non localhost
-      - DB_USER=user
-      - DB_PASSWORD=password
-      - DB_NAME=miodb
       - GOOGLE_API_KEY=AIzaSyD2PIPkJR0VYgyhQhXFkAibh_d_c-HiHkc 
-    depends_on:
-      - db
-
-  # ---------------------------------------------
-  # 4. FRONTEND 
-  # ---------------------------------------------
+  # frontend React
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"  # Porta 3000 (standard React)
+      - "3000:3000"  
     volumes:
-      - ./frontend:/app         # Collegamento per vedere le modifiche live
-      - /app/node_modules       # TRUCCO: Evita che Docker cancelli le librerie installate dentro
-    stdin_open: true            # IMPORTANTE: Serve per non far chiudere React subito
-    tty: true                   # IMPORTANTE: Serve per input da terminale
+      - ./frontend:/app         
+      - /app/node_modules      
+    stdin_open: true    # uso stdin e tty cosi vedo live le modifiche        
+    tty: true                   
     depends_on:
       - backend
-
-# Definizione del volume per non perdere i dati del DB se spegni docker
-volumes:
-  postgres_data:

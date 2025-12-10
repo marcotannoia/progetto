@@ -2,19 +2,17 @@ import React, { useState } from 'react';
 
 const API_BASE = 'http://localhost:5000';
 
-function Login({ setUser }) {
-  // Stati per il form
+function Login({ setUser }) { // come sempre inizializo gli stati
   const [form, setForm] = useState({ username: '', password: '', regione: '' });
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
 
-  // Gestione del submit (Login o Registrazione)
-  const handleAuth = async (e) => {
+  const handleAuth = async (e) => { //  per cpaire se loggare o registrare
     e.preventDefault();
     const endpoint = isRegister ? '/api/registrati' : '/api/login';
     
     try {
-      const res = await fetch(`${API_BASE}${endpoint}`, {
+      const res = await fetch(`${API_BASE}${endpoint}`, { //fetcho la rotta giusta
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -38,7 +36,7 @@ function Login({ setUser }) {
     }
   };
 
-  return (
+  return ( 
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4">
       <div className="w-full max-w-sm bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg">
         <form onSubmit={handleAuth} className="space-y-4">

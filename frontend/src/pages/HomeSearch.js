@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 const API_BASE = 'http://localhost:5000';
 
-// Componente Modale (Invariato, lo includo per completezza)
+
 const WrappedDisplay = ({ stats, username, onClose }) => (
   <div className="fixed inset-0 bg-gray-900 bg-opacity-95 z-50 flex items-center justify-center p-4 fade-in">
     <div className="bg-gray-800 p-8 rounded-xl border-2 border-green-500 max-w-sm w-full text-white shadow-2xl relative">
       <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-xl">✕</button>
-      <h2 className="text-2xl font-extrabold text-center mb-1 text-green-400">Wrapped 2025</h2>
-      <p className="text-center text-gray-400 mb-6">di <span className="text-white font-bold">{username}</span></p>
+      <h2 className="text-2xl font-extrabold text-center mb-1 text-green-400">Wrapped del Mese</h2> {/* Modificato il titolo */}
+      <p className="text-center text-gray-400 mb-6">dal <span className="text-white font-bold">{stats.data_inizio}</span> di <span className="text-white font-bold">{username}</span></p> {/* Aggiunta data inizio dinamica */}
       {stats ? (
         <div className="space-y-4">
           <div className="p-4 bg-gray-700/50 rounded-xl border border-gray-600">
@@ -28,24 +28,21 @@ const WrappedDisplay = ({ stats, username, onClose }) => (
   </div>
 );
 
-function HomeSearch({ user }) {
+function HomeSearch({ user }) { // pprendo in input un utente e sotto inizializzzo gli stati
   const [searchUser, setSearchUser] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  const [allUsers, setAllUsers] = useState([]); // Ora conterrà oggetti {username, regione}
-  const [recommended, setRecommended] = useState([]); // Utenti della stessa regione
-  
+  const [allUsers, setAllUsers] = useState([]);
+  const [recommended, setRecommended] = useState([]); /// quqesto ci aiuta e gestire i consgiliati
   const [targetWrapped, setTargetWrapped] = useState(null); 
   const [targetUser, setTargetUser] = useState(null);
 
   useEffect(() => {
-    const loadAllUsers = async () => {
+    const loadAllUsers = async () => { // qui sotto carico tutti gli utenti ecerco i consigiait
       try {
         const res = await fetch(`${API_BASE}/api/utenti`, { credentials: 'include' });
         const data = await res.json();
         if (data.ok) {
             setAllUsers(data.utenti);
-            
-            // FILTRO CONSIGLIATI: Stessa regione dell'utente loggato
             if (user.regione) {
                 const sameRegion = data.utenti.filter(u => 
                     u.regione === user.regione.toLowerCase() && 
@@ -59,7 +56,7 @@ function HomeSearch({ user }) {
     loadAllUsers();
   }, [user]);
 
-  const handleSearchChange = (text) => {
+  const handleSearchChange = (text) => { // logica di ricerca utenti
     setSearchUser(text);
     if (targetUser) { setTargetWrapped(null); setTargetUser(null); }
 
@@ -73,29 +70,26 @@ function HomeSearch({ user }) {
       setSuggestions(filtered);
     } else {
       setSuggestions([]);
-    }
+    } // suggeriso i consigliati, inoltre li filtro tutti minuscoli cosi mi iauto nella ricerca
   };
 
-  const showWrapped = async (username) => {
-    // ... logica invariata ...
+  const showWrapped = async (username) => { // qui sotto mostro il wrapped dell'utente selezionato
     try {
       const res = await fetch(`${API_BASE}/api/wrapped/${username}`, { credentials: 'include' });
       const data = await res.json();
       if (data.ok) {
         setTargetUser(username);
         setTargetWrapped(data.dati);
-        setSuggestions([]); // Pulisce i suggerimenti
+        setSuggestions([]); 
       } else {
         alert(data.messaggio || 'Nessun dato per questo utente.');
       }
     } catch (e) { alert("Errore connessione."); }
   };
 
-  return (
+  return ( // qui metto banale fronend per cpaire
     <div className="p-6 pt-12 min-h-screen pb-24">
       <h1 className="text-3xl font-bold text-center mb-8 tracking-tight">Cerca Amici 🔍</h1>
-      
-      {/* BARRA DI RICERCA */}
       <div className="relative max-w-md mx-auto mb-8">
         <div className="relative">
             <input 
@@ -107,7 +101,6 @@ function HomeSearch({ user }) {
             <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">🔎</span>
         </div>
         
-        {/* Dropdown Risultati Ricerca */}
         {suggestions.length > 0 && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 z-20 overflow-hidden">
             {suggestions.map((u, i) => (
@@ -124,7 +117,7 @@ function HomeSearch({ user }) {
         )}
       </div>
 
-      {/* SEZIONE CONSIGLIATI (Visibile se non stai cercando o se la ricerca è vuota) */}
+
       {!searchUser && recommended.length > 0 && !targetUser && (
           <div className="max-w-md mx-auto fade-in">
               <h3 className="text-gray-400 text-sm font-bold uppercase mb-4 tracking-wider">
@@ -150,7 +143,6 @@ function HomeSearch({ user }) {
           </div>
       )}
 
-      {/* MODALE WRAPPED */}
       {targetUser && targetWrapped && (
         <WrappedDisplay stats={targetWrapped} username={targetUser} onClose={() => { setTargetWrapped(null); setTargetUser(null); setSearchUser(''); }} />
       )}
