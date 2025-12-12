@@ -129,6 +129,32 @@ function NewTrip({ user }) {// come semre inizalizzo gli stati
             <h3>{risultato.end_address}</h3>
           </div>
 
+          {/* Mappa Google Embed con traffico */}
+          {risultato.map_url && (
+            <div className="map-container" style={{ 
+              margin: '20px 0', 
+              borderRadius: '16px', 
+              overflow: 'hidden', 
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              height: '350px' // Altezza fissa per vedere bene la mappa
+            }}>
+              <iframe
+                title="Mappa percorso"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={risultato.map_url}
+              ></iframe>
+            </div>
+          )}
+          {risultato && !['public_bus', 'bike', 'walking'].includes(risultato.mezzo_scelto) && (
+            <p className="map-note">
+              Per la mappa dinamica utilizziamo l'auto come mezzo rappresentativo per calcolare il percorso mostrato.
+            </p>
+          )}
+
           <div className="results-body">
             <div className="result-highlight">
               <p>CO₂ stimata</p>

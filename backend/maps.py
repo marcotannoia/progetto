@@ -1,5 +1,6 @@
 import requests
 import os
+import urllib.parse
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
@@ -35,3 +36,27 @@ def get_google_distance(origin, destination): # prendo nel metodo destinazione e
 
     except Exception as e:
         print(f"Errore connessione: {e}") # gestisco sta eccezione generale per farmi un idea 
+        return None
+
+def get_embed_map_url(origin, destination):
+    """
+    Genera l'URL per la Google Maps Embed API in modalità 'directions'.
+    Questa modalità supporta la visualizzazione del traffico.
+    """
+    if not origin or not destination:
+        return None
+        
+    # URL base ufficiale per l'Embed API
+    base_url = "https://www.google.com/maps/embed/v1/directions"
+    
+    params = {
+        'key': GOOGLE_MAPS_API_KEY,
+        'origin': origin,
+        'destination': destination,
+        'mode': 'driving', # Fondamentale per vedere il traffico
+        'language': 'it'
+    }
+    
+    # Costruisce la query string in modo sicuro
+    query_string = urllib.parse.urlencode(params)
+    return f"{base_url}?{query_string}"

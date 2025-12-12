@@ -95,6 +95,9 @@ def navigazione():
             start=route.get('start_address'), 
             end=route.get('end_address')      
         )
+    
+    # Genero l'URL per l'iframe (mappa interattiva con traffico)
+    map_url = maps.get_embed_map_url(route.get('start_address'), route.get('end_address'))
 
     return jsonify({
         "ok": True,
@@ -103,7 +106,8 @@ def navigazione():
         "distanza_testo": route.get('distanza_testo'),
         "emissioni_co2": f"{emissioni:.2f} kg di CO₂" if isinstance(emissioni, (int, float)) else str(emissioni),
         "mezzo_scelto": mezzo,
-        "is_logged": bool(current_username)
+        "is_logged": bool(current_username),
+        "map_url": map_url
     })
 
 # rotta per il wrapped
