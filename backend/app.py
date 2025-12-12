@@ -171,6 +171,17 @@ def api_calcolo_alberi():
         "giorni_per_albero": giorni_necessari,
         "messaggio": f"Un albero impiegherebbe circa {giorni_necessari} giorni per assorbire questa CO₂."
     })
+
+@app.route('/api/classifica', methods=['GET'])
+def api_classifica():
+    try:
+        data = storico.get_classifica_risparmio()
+        return jsonify({"ok": True, "classifica": data})
+    except Exception as e:
+        print(f"Errore classifica: {e}")
+        return jsonify({"ok": False, "classifica": []})
+    
+    
 if __name__ == '__main__':
     print("Server EcoRoute attivo su http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)

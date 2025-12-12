@@ -35,6 +35,7 @@ function HomeSearch({ user }) {
   const [suggestions, setSuggestions] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [recommended, setRecommended] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]); 
   const [targetWrapped, setTargetWrapped] = useState(null);
   const [targetUser, setTargetUser] = useState(null);
 
@@ -55,7 +56,17 @@ function HomeSearch({ user }) {
         }
       } catch (e) {}
     };
+
+    const loadLeaderboard = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/classifica`, { credentials: 'include' });
+        const data = await res.json();
+        if (data.ok) setLeaderboard(data.classifica);
+      } catch (e) { console.error("Errore classifica", e); }
+    };
+
     loadAllUsers();
+    loadLeaderboard();
   }, [user]);
 
   const handleSearchChange = (text) => {
@@ -138,6 +149,37 @@ function HomeSearch({ user }) {
                 </div>
                 <span className="flash-arrow">→</span>
               </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* --- SEZIONE TOP 3 CLASSIFICA --- */}
+      {!searchUser && !targetUser && leaderboard.length > 0 && (
+        <section className="leaderboard-section fade-in">
+          <div className="section-header">
+            <p className="eyebrow">Hall of Fame</p>
+            <h3>🏆 Top 3 EcoSavers</h3>
+          </div>
+          
+          <div className="leaderboard-list">
+            {/* PRENDIAMO SOLO I PRIMI 3 ELEMENTI CON .slice(0, 3) */}
+            {leaderboard.slice(0, 3).map((u, index) => (
+              <div key={index} className="leaderboard-item" onClick={() => showWrapped(u.username)}>
+                <div className={`rank-badge rank-${index + 1}`}>{index + 1}</div>
+                <div className="leaderboard-info">
+                  <span className="leaderboard-name">{u.username}</span>
+                  {/* Etichette specifiche per la Top 3 */}
+                  <span className="leaderboard-sub">
+                    {index === 0 ? "🥇 Campione Assoluto" : 
+                     index === 1 ? "🥈 Medaglia d'Argento" : 
+                     "🥉 Medaglia di Bronzo"}
+                  </span>
+                </div>
+                <div className="leaderboard-value">
+                  -{u.risparmio} <span>kg CO₂</span>
+                </div>
+              </div>
             ))}
           </div>
         </section>

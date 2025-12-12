@@ -179,7 +179,7 @@ function NewTrip({ user }) {// come semre inizalizzo gli stati
               </p>
             ) : (
               <p className="result-note success">Viaggio salvato con successo nel tuo storico!</p>
-            )}
+            )}  
           </div>
         </section>
       )}

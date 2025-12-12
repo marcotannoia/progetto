@@ -241,6 +241,14 @@
             "mezzo": "piedi",
             "start": "Bari BA, Italia",
             "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-12T17:57:53.687353",
+            "co2": 11.994,
+            "km": 99.952,
+            "mezzo": "car",
+            "start": "71042 Cerignola FG, Italia",
+            "end": "Bari BA, Italia"
         }
     ],
     "daniele": [

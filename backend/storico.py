@@ -89,3 +89,39 @@ def genera_wrapped(username): # genero un wrapped con cadenza mensile
 def leggi_tutti_utenti(): # mi serve per edere chi sta loggato  nel db
     db = carica_db()
     return list(db.keys())  
+
+def get_classifica_risparmio():
+    db = carica_db()
+    classifica = []
+    
+    # Valore preso dal tuo calcoloCO2.py (auto media)
+    CO2_AUTO_PER_KM = 0.120 
+
+    for username, viaggi in db.items():
+        co2_risparmiata_totale = 0.0
+        
+        for v in viaggi:
+            km = float(v.get('km', 0))
+            co2_emessa = float(v.get('co2', 0))
+            
+            # Calcolo teorico: quanto avrebbe inquinato in auto?
+            co2_teorica_auto = km * CO2_AUTO_PER_KM
+            
+            # Il risparmio è la differenza
+            risparmio = co2_teorica_auto - co2_emessa
+            
+            # Aggiungiamo solo se c'è un risparmio effettivo
+            if risparmio > 0:
+                co2_risparmiata_totale += risparmio
+                
+        # Inseriamo in classifica solo chi ha effettivamente risparmiato qualcosa
+        if co2_risparmiata_totale > 0:
+            classifica.append({
+                "username": username,
+                "risparmio": round(co2_risparmiata_totale, 2)
+            })
+    
+    # Ordina decrescente (chi ha risparmiato di più in cima)
+    classifica.sort(key=lambda x: x['risparmio'], reverse=True)
+    
+    return classifica
