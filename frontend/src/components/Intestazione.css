@@ -1,12 +1,17 @@
 .hero-header {
-  position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: min(1100px, 100%);
-  margin: 0 auto;
-  padding: 22px 28px 10px;
-  margin-bottom: 12px;
+  width: min(1000px, 95%);
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: var(--bg-petrolio-dark); /* Tonalità scura richiesta */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px; /* Arrotondamento stile React Bits */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky; 
+  top: 20px;       /* Distanza dal bordo superiore della finestra */
+  z-index: 1000;   /* Assicura che stia sopra a tutti gli altri elementi */
 }
 
 .title-block {
@@ -15,13 +20,12 @@
 }
 
 .hero-title {
-  font-size: clamp(2.6rem, 4vw, 3.6rem);
-  letter-spacing: 0.14em;
+  font-size: 1.5rem; /* Più piccola e pulita al centro */
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 800;
-  margin: 4px 0 2px;
+  font-weight: 700;
   color: #bdfcc9;
-  text-shadow: 0 14px 45px rgba(74, 222, 128, 0.35);
+  margin: 0;
 }
 
 .title-block .eyebrow {
@@ -37,34 +41,22 @@
   border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-.title-block .caption {
-  margin-top: 2px;
-  font-size: 0.9rem;
-  letter-spacing: 0.08em;
-  color: #d9f99d;
-  text-transform: lowercase;
-}
 
 .corner-icon {
-  position: absolute;
-  top: 16px;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.18);
-  color: #f4f7ff;
+  position: static; /* Rimuoviamo il posizionamento assoluto */
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);  border-radius: 8px;
   display: grid;
   place-items: center;
-  font-size: 1.4rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .corner-icon:hover {
-  transform: translateY(-3px);
-  background: rgba(34, 197, 94, 0.22);
-  border-color: rgba(74, 222, 128, 0.35);
+  background: var(--accent-green);
+  transform: translateY(0);
 }
 
 .corner-left {
@@ -86,7 +78,9 @@
     font-size: 1.2rem;
   }
 
-  .title-block .eyebrow {
-    letter-spacing: 0.18em;
-  }
+  /* Nascondiamo scritte extra per pulizia come da immagine */
+.title-block .eyebrow, 
+.title-block .caption {
+  display: none;
+}
 }
