@@ -1,25 +1,8 @@
 {
-    "admin": {
-        "password": "adminpass",
-        "role": "superuser",
-        "username": "admin"
-    },
-    "marco": {
-        "username": "marco",
-        "password": "sedia",
-        "regione": "puglia",
-        "role": "utente"
-    },
     "daniele": {
         "username": "daniele",
-        "password": "sedia",
+        "password": "scrypt:32768:8:1$GVHbcP4u6VBD0ZGd$5e8e0f42bb8b049afe7b52ecde486eac265ef68173f3d32025e94f038520982e6b8a32e9df0e19d056df4168b1fd1222c24a78de6a5bf9c16ddbf656d19ed67f",
         "regione": "puglia",
-        "role": "utente"
-    },
-    "licia": {
-        "username": "licia",
-        "password": "sedia",
-        "regione": "molise",
         "role": "utente"
     }
 }

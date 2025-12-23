@@ -1,60 +1,63 @@
 import json
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 DB_FILE = "users.json"
 
-# utenti di default
-DEFAULT_USERS = {
-    "admin": {"password": "adminpass", "role": "superuser", "username": "admin"},
-    "paolo": {"password": "password", "role": "utente", "username": "paolo"}
-}
-
 def caricaDB():
-    if not os.path.exists(DB_FILE): # provo a caricare il db altrimenti uso qelli di default giusto per farlo funzionare
-        salvaDB(DEFAULT_USERS)
-        return DEFAULT_USERS.copy()
+    """Carica il database dal file JSON. Se non esiste, ritorna un dizionario vuoto."""
+    if not os.path.exists(DB_FILE):
+        return {} # Ritorna vuoto invece di caricare i default
     
     try:
-        with open(DB_FILE, 'r') as f: # accedo in lettura e nel caso carico altrimenti mando l'eccezione
+        with open(DB_FILE, 'r') as f:
             return json.load(f)
     except:
-        return DEFAULT_USERS.copy()
+        return {} # In caso di errore di lettura, partiamo da un DB vuoto
 
 def salvaDB(db):
+    """Salva il dizionario degli utenti nel file JSON."""
     try:
-        with open(DB_FILE, 'w') as f: # questa funzione salva nel database vero e proprio e ci scrivo dentro
+        with open(DB_FILE, 'w') as f:
             json.dump(db, f, indent=4)
     except Exception as e:
         print(f"Errore salvataggio DB: {e}")
 
-
-def login_user(username, password): # funzione di login standard
-    db = caricaDB()
-    user = db.get(username)
-    if user and user['password'] == password:
-        return user
-    return None
-
-def register_user(username, password, regione):# idem + patate per la registrazione
+def register_user(username, password, regione):
+    """Registra un nuovo utente con password hashata."""
     db = caricaDB()
     if username in db:
         return False, "Username già in uso"
     
-    db[username] = {    # formato del nuovo utente 
+    # [SICUREZZA] Generiamo l'hash della password
+    hashed_password = generate_password_hash(password)
+    
+    db[username] = {
         "username": username,
-        "password": password,
+        "password": hashed_password,
         "regione": regione,
         "role": "utente"
     }
     salvaDB(db) 
     return True, "Registrato con successo"
 
-def get_users_list(): # funzione per leggere tutti gli utenti, carico gli utenti e seleziono solo username e regione
+def login_user(username, password):
+    """Verifica le credenziali confrontando l'hash salvato con la password inserita."""
+    db = caricaDB()
+    user = db.get(username)
+    
+    # [SICUREZZA] Confronto sicuro tramite check_password_hash
+    if user and check_password_hash(user['password'], password):
+        return user
+    return None
+
+def get_users_list():
+    """Ritorna la lista di tutti gli utenti registrati (solo username e regione)."""
     db = caricaDB()
     lista = []
     for user_key, user_data in db.items():
         lista.append({
             "username": user_data.get("username"),
-            "regione": user_data.get("regione", "").lower() # li prendo minuscoli per prenderli tutti
+            "regione": user_data.get("regione", "").lower()
         })
     return lista
