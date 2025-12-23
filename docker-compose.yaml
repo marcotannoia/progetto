@@ -8,8 +8,9 @@ services:
       - "5000:5000"
     volumes:
       - ./backend:/app       
+    # docker-compose.yaml modificato
     environment:
-      - GOOGLE_API_KEY=AIzaSyD2PIPkJR0VYgyhQhXFkAibh_d_c-HiHkc 
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
   # frontend React
   frontend:
     build: ./frontend
