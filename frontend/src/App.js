@@ -12,6 +12,8 @@ const API_BASE = 'http://localhost:5000';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Inizializza il tema
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
   const toggleTheme = () => {
@@ -19,6 +21,12 @@ function App() {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
   };
+
+  // Sincronizza la classe sul body
+  useEffect(() => {
+    document.body.className = ''; 
+    document.body.classList.add(`${theme}-mode`); 
+  }, [theme]);
 
   const checkSession = async () => {
     try {
@@ -36,10 +44,14 @@ function App() {
     <Router>
       <div className={`app-shell ${theme}-theme`}>
         
-        {/* CONFIGURAZIONE PER SFONDO NETTO E VIBRANTE */}
+        {/* CONFIGURAZIONE SFONDO "GREEN-ONLY" */}
         <Iridescence 
-          color={[0.3, 1, 0.6]} // Questo è il VERDE NEON della demo
-          mouseReact={false}    // Mettiamo false per renderlo più stabile come un vero sfondo
+          color={
+            theme === 'dark' 
+              ? [0.1, 0.3, 0.2]       // Notte: Verde Foresta Profondo
+              : [0.25, 0.6, 0.35]     // Giorno: Verde Natura (Vibrante ma non neon, né bianco)
+          } 
+          mouseReact={false}
           amplitude={0.1}
           speed={1.0}
         />

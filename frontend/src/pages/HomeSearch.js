@@ -11,14 +11,13 @@ const RankIcons = {
   3: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><path d="M8.21 13.89L7 21L12 17L17 21L15.79 13.88"/></svg>
 };
 
-function HomeSearch({ user, theme, toggleTheme }) { // FIX: Aggiunte props theme e toggleTheme
+function HomeSearch({ user, theme, toggleTheme }) {
   const [searchUser, setSearchUser] = useState('');
   const [leaderboard, setLeaderboard] = useState([]); 
   const [suggestions, setSuggestions] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    // Carica utenti per suggerimenti
     const loadUsers = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/utenti`, { credentials: 'include' });
@@ -27,7 +26,6 @@ function HomeSearch({ user, theme, toggleTheme }) { // FIX: Aggiunte props theme
       } catch (e) {}
     };
 
-    // Carica classifica
     const loadLeaderboard = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/classifica`, { credentials: 'include' });
@@ -52,28 +50,26 @@ function HomeSearch({ user, theme, toggleTheme }) { // FIX: Aggiunte props theme
 
   return (
     <div className="search-page">
-      {/* FIX: Passo theme e toggleTheme all'intestazione per far funzionare lo switch */}
       <Intestazione theme={theme} toggleTheme={toggleTheme} />
 
       <div className="hero-content-search">
         <div className="search-dashboard">
           
-          {/* SEZIONE 1: Barra di Ricerca Stile Capsula */}
+          {/* SEZIONE 1: Barra di Ricerca - Ora più tondeggiante */}
           <div className="search-panel">
             <div className="search-label-tag">SEARCH</div>
-            <h2>Trova utenti sostenibili e compara i tuoi percorsi.</h2>
+            <h2>Trova utenti sostenibili</h2>
             
             <div className="search-input-group">
               <input 
                 className="big-search-input"
-                placeholder="Username..."
+                placeholder="Cerca un username..."
                 value={searchUser}
                 onChange={(e) => handleSearchChange(e.target.value)}
               />
-              <button className="search-action-btn">Cerca Utente</button>
+              <button className="search-action-btn">Cerca</button>
             </div>
             
-            {/* Lista suggerimenti a comparsa */}
             {suggestions.length > 0 && (
               <div className="suggestions-dropdown">
                 {suggestions.map((u, i) => (
@@ -85,43 +81,37 @@ function HomeSearch({ user, theme, toggleTheme }) { // FIX: Aggiunte props theme
             )}
           </div>
 
-          {/* SEZIONE 2: Hall of Fame / Classifica */}
+          {/* SEZIONE 2: Hall of Fame - Senza scalette, solo lista */}
           <div className="leaderboard-panel">
             <div className="lb-header">
-              <span className="lb-tag">HALL OF FAME</span>
-              <h3>🏆 Top 3 EcoSavers</h3>
+              <span className="lb-tag">TOP 3</span>
+              <h3>🏆 Hall of Fame</h3>
             </div>
 
             <div className="rank-list">
               {leaderboard.length > 0 ? (
                 leaderboard.slice(0, 3).map((u, index) => (
                   <div key={index} className={`rank-card rank-${index + 1}`}>
-                    <div className="rank-number">{index + 1}</div>
-                    <div className="rank-avatar">
-                      {/* Icona diversa per 1°, 2° e 3° */}
-                      {RankIcons[index + 1] || RankIcons[3]}
-                    </div>
-                    <div className="rank-info">
-                      <span className="rank-name">{u.username}</span>
-                      <span className="rank-badge">
-                        {index === 0 ? "👑 Campione Assoluto" : index === 1 ? "🥈 Vice Campione" : "🥉 Bronzo"}
-                      </span>
+                    <div className="rank-left-group">
+                      <div className="rank-number">{index + 1}</div>
+                      <div className="rank-avatar">
+                        {RankIcons[index + 1] || RankIcons[3]}
+                      </div>
+                      <div className="rank-info">
+                        <span className="rank-name">{u.username}</span>
+                        <span className="rank-badge">
+                          {index === 0 ? "👑 Leader" : "Eco Saver"}
+                        </span>
+                      </div>
                     </div>
                     <div className="rank-score">
-                      +{u.risparmio} <span>kg CO₂</span>
+                      +{u.risparmio} <span>kg</span>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="empty-state">Nessun dato in classifica ancora.</div>
+                <div className="empty-state">Classifica in aggiornamento...</div>
               )}
-            </div>
-
-            {/* Podio visivo stilizzato CSS */}
-            <div className="podium-visual">
-              <div className="podium-block p-2">2</div>
-              <div className="podium-block p-1">1</div>
-              <div className="podium-block p-3">3</div>
             </div>
           </div>
 
