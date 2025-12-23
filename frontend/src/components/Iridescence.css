@@ -1,0 +1,18 @@
+.iridescence-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* Dietro al contenuto */
+  pointer-events: none; /* Non blocca i click */
+  
+  /* FIX PATINA: Opacità al 100% e sfondo nero per contrasto massimo */
+  opacity: 3;
+  background-color: #000; 
+  mix-blend-mode: normal; /* Nessun blending strano, colori puri */
+}
+
+canvas {
+  display: block;
+}

@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Intestazione from '../components/Intestazione';
 import './NewTrip.css';
 
 const API_BASE = 'http://localhost:5000';
 
-function NewTrip({ user }) {// come semre inizalizzo gli stati
+// Icone Veicoli SVG
+const VehicleIcons = {
+  piedi: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 20c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/><path d="M14 20c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/><path d="M7 16l4-2.5"/><path d="M15 12l-2-4h-3l-2 5"/></svg>,
+  bike: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6l-5 5.5"/><path d="M15 6a2 2 0 0 1 2 2v4"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>,
+  car: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 00-.84-.99L16 11l-2.7-3.6a1 1 0 00-.8-.4H5.24a2 2 0 00-1.8 1.1l-.8 1.63A6 6 0 002 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>,
+  public_bus: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>,
+  veicolo_elettrico: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 16h3v-3.15a1 1 0 00-.84-.99L16 11l-2.7-3.6a1 1 0 00-.8-.4H5.24a2 2 0 00-1.8 1.1l-.8 1.63A6 6 0 002 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="M10 2v5h4l-2 5"/></svg>
+};
+
+function NewTrip({ user, theme, toggleTheme }) {
   const [percorso, setPercorso] = useState({ start: '', end: '' });
   const [mezzoScelto, setMezzoScelto] = useState('car');
   const [veicoli, setVeicoli] = useState([]);
@@ -20,20 +28,18 @@ function NewTrip({ user }) {// come semre inizalizzo gli stati
 
   const calcola = async () => {
     setRisultato(null);
-    setMessaggioAlberi(null); // ogni volta cancello i mex precedenti
-
+    setMessaggioAlberi(null);
     try {
-      const res = await fetch(`${API_BASE}/api/navigazione`, {  // fetcho la rotta di calcolo
+      const res = await fetch(`${API_BASE}/api/navigazione`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ ...percorso, mezzo: mezzoScelto })
       });
       const data = await res.json();
-      
       if (data.ok) {
         setRisultato(data);
-        const co2Value = parseFloat(data.emissioni_co2); // leggo solo i numeri 
+        const co2Value = parseFloat(data.emissioni_co2); 
           if (!isNaN(co2Value) && co2Value > 0) {
             try {
                 const treeRes = await fetch(`${API_BASE}/api/calcolo-alberi`, {
@@ -42,144 +48,97 @@ function NewTrip({ user }) {// come semre inizalizzo gli stati
                     body: JSON.stringify({ co2: co2Value })
                 });
                 const treeData = await treeRes.json();
-                
-                if (treeData.ok) {
-                    setMessaggioAlberi(treeData.messaggio); // salvo il messaggio 
-                }
-            } catch (err) {
-                console.error("Errore nel calcolo alberi:", err);
-            }
+                if (treeData.ok) setMessaggioAlberi(treeData.messaggio);
+            } catch (err) { console.error(err); }
         }
-      } else {
-        alert(data.errore);
-      }
+      } else { alert(data.errore); }
     } catch (e) { alert("Errore calcolo"); }
   };
 
   return (
     <div className="newtrip-page">
-      <Intestazione />
+      <Intestazione theme={theme} toggleTheme={toggleTheme} />
 
-      <section className="newtrip-hero">
-        <div className="intro">
-          <div>
-            <p className="eyebrow">Pianifica in equilibrio</p>
-            <h2>Parti, arrivi e calcola al centro della scena.</h2>
-            <p className="subtext">
-              Box ampi e simmetrici, pulsante in evidenza e scelta del mezzo sotto il tasto.
-            </p>
-          </div>
-          {!user && (
-            <div className="cta-box">
-              <span className="cta-label">Nuovo qui?</span>
-              <Link to="/login">Accedi o registrati per salvare i viaggi</Link>
-            </div>
-          )}
-        </div>
-
-        <div className="form-card">
-          <div className="input-grid">
-            <div className="field">
-              <label>Luogo di partenza</label>
+      <main className="hero-content">
+        <div className="search-card-container">
+          <section className="main-search-card fade-in">
+            <h2 className="card-title">Trova il tuo percorso</h2>
+            
+            <div className="input-fields">
               <input
-                className="trip-input"
-                placeholder="Inserisci la città o l'indirizzo"
+                className="card-input"
+                placeholder="Partenza (es. Bari)"
                 value={percorso.start}
                 onChange={e => setPercorso({ ...percorso, start: e.target.value })}
               />
-            </div>
-            <div className="field">
-              <label>Luogo di arrivo</label>
               <input
-                className="trip-input"
-                placeholder="Inserisci la destinazione"
+                className="card-input"
+                placeholder="Destinazione (es. Milano)"
                 value={percorso.end}
                 onChange={e => setPercorso({ ...percorso, end: e.target.value })}
               />
             </div>
-          </div>
 
-          <button onClick={calcola} className="primary-button">
-            Calcola
-          </button>
-
-          <div className="vehicles">
-            <p className="section-subtitle">Scegli il mezzo</p>
-            <div className="vehicle-grid">
+            <div className="vehicle-selector">
               {veicoli.map(v => (
                 <button
                   key={v.id}
                   onClick={() => setMezzoScelto(v.id)}
-                  className={`vehicle-button ${mezzoScelto === v.id ? 'selected' : ''}`}
+                  className={`v-btn ${mezzoScelto === v.id ? 'active' : ''}`}
                 >
-                  <span className="vehicle-icon">{v.icon}</span>
-                  <span className="vehicle-label">{v.nome || v.id}</span>
+                  <div className="v-circle">
+                    {VehicleIcons[v.id] || <span>🚗</span>}
+                  </div>
+                  <span className="v-label">{v.label || v.id}</span>
                 </button>
               ))}
             </div>
-          </div>
+
+            <button onClick={calcola} className="cta-search-btn">
+              Calcola Percorso
+            </button>
+          </section>
         </div>
-      </section>
+        <div className="leaf-decoration"></div>
+      </main>
 
+      {/* Overlay Risultati - MODIFICATO PER DASHBOARD GRANDE */}
       {risultato && (
-        <section className="results-card">
-          <div className="results-header">
-            <h3>{risultato.start_address}</h3>
-            <span className="arrow">⬇</span>
-            <h3>{risultato.end_address}</h3>
-          </div>
-
-          {/* Mappa Google Embed con traffico */}
-          {risultato.map_url && (
-            <div className="map-container" style={{ 
-              margin: '20px 0', 
-              borderRadius: '16px', 
-              overflow: 'hidden', 
-              border: '1px solid rgba(34, 197, 94, 0.3)',
-              height: '350px' // Altezza fissa per vedere bene la mappa
-            }}>
-              <iframe
-                title="Mappa percorso"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={risultato.map_url}
-              ></iframe>
-            </div>
-          )}
-          {risultato && !['public_bus', 'bike', 'walking'].includes(risultato.mezzo_scelto) && (
-            <p className="map-note">
-              Per la mappa dinamica utilizziamo l'auto come mezzo rappresentativo per calcolare il percorso mostrato.
-            </p>
-          )}
-
-          <div className="results-body">
-            <div className="result-highlight">
-              <p>CO₂ stimata</p>
-              <span className="value">{risultato.emissioni_co2}</span>
+        <section className="results-overlay fade-in">
+          <div className="results-content-card">
+            <button className="close-icon" onClick={() => setRisultato(null)}>✕</button>
+            
+            <div className="res-left">
+               <div className="res-header-mini">
+                  <span>TRATTA CALCOLATA</span>
+                  <h3>{risultato.start_address} <span className="arrow-green">➔</span> {risultato.end_address}</h3>
+               </div>
+               {risultato.map_url && (
+                <div className="res-map-big">
+                  <iframe title="Map" width="100%" height="100%" src={risultato.map_url} style={{border:0}}></iframe>
+                </div>
+              )}
             </div>
 
-            <div className="tree-card">
-              <div className="tree-icon">🌳</div>
-              <div>
-                <p className="tree-title">Alberi e compensazione</p>
-                <p className="tree-text">
-                  {messaggioAlberi
-                    ? messaggioAlberi
-                    : (!isNaN(parseFloat(risultato.emissioni_co2)) && 'Gli alberi possono respirare! Continua così.')}
-                </p>
+            <div className="res-right">
+              <div className="stat-box co2-box">
+                <p className="stat-label">IMPATTO CO₂</p>
+                <span className="stat-giant">{risultato.emissioni_co2}</span>
+                <span className="stat-sub">Stima calcolata sul mezzo scelto</span>
               </div>
-            </div>
 
-            {!user ? (
-              <p className="result-note">
-                Viaggio calcolato, ma non salvato. <Link to="/login">Accedi</Link> per salvare i progressi!
-              </p>
-            ) : (
-              <p className="result-note success">Viaggio salvato con successo nel tuo storico!</p>
-            )}  
+              <div className="stat-box tree-box">
+                <div className="tree-icon-bg">🌳</div>
+                <div>
+                   <p className="stat-label">COMPENSAZIONE NATURALE</p>
+                   <span className="stat-desc">{messaggioAlberi || "Nessun impatto rilevante, ottimo lavoro!"}</span>
+                </div>
+              </div>
+
+              <button className="new-search-btn" onClick={() => setRisultato(null)}>
+                Effettua nuova ricerca
+              </button>
+            </div>
           </div>
         </section>
       )}

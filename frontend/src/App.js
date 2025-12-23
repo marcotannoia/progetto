@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import Login from './pages/Login'; 
 import HomeSearch from './pages/HomeSearch'; 
 import NewTrip from './pages/NewTrip'; 
 import Profile from './pages/Profile'; 
+import Iridescence from './components/Iridescence'; 
 import './App.css'; 
 
 const API_BASE = 'http://localhost:5000';
@@ -12,6 +12,13 @@ const API_BASE = 'http://localhost:5000';
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   const checkSession = async () => {
     try {
@@ -23,29 +30,29 @@ function App() {
 
   useEffect(() => { checkSession(); }, []);
 
-  if (loading) return <div className="text-white p-10">Caricamento...</div>;
+  if (loading) return <div style={{color:'white', padding:'20px'}}>Caricamento...</div>;
 
-  // NUOVA LOGICA DI FLUSSO (La pagina di calcolo è la home per tutti)
   return (
     <Router>
-      <div className="app-shell">
-        <main className="page-body">
+      <div className={`app-shell ${theme}-theme`}>
+        
+        {/* CONFIGURAZIONE PER SFONDO NETTO E VIBRANTE */}
+        <Iridescence 
+          color={[0.3, 1, 0.6]} // Questo è il VERDE NEON della demo
+          mouseReact={false}    // Mettiamo false per renderlo più stabile come un vero sfondo
+          amplitude={0.1}
+          speed={1.0}
+        />
+
+        <main className="page-body" style={{ position: 'relative', zIndex: 1 }}>
           <Routes>
-            <Route path="/" element={<NewTrip user={user} />} /> {/* 1. Pagina principale di calcolo viaggio */}
-            
-            {/* 2. Pagina Login/Registrazione */}
+            <Route path="/" element={<NewTrip user={user} theme={theme} toggleTheme={toggleTheme} />} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <Login setUser={setUser} />} />
-            
-            {/* 3. Rotte protette (Accessibili solo se loggato, altrimenti redirect a Login) */}
-            <Route path="/cerca" element={user ? <HomeSearch user={user} /> : <Navigate to="/login" />} />
-            <Route path="/profilo" element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />} />
-            
+            <Route path="/cerca" element={user ? <HomeSearch user={user} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
+            <Route path="/profilo" element={user ? <Profile user={user} setUser={setUser} theme={theme} toggleTheme={toggleTheme} /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
-        
-        {/* La Navbar è visibile solo quando l'utente è loggato */}
-        {user && <Navbar />}
       </div>
     </Router>
   );

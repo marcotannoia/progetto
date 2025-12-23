@@ -2,10 +2,6 @@
 node_modules/
 __pycache__/
 *.pyc
-
-# Ignora i database locali
-postgres_data/
-
 # Ignora file di sistema e log
 .DS_Store
 *.log

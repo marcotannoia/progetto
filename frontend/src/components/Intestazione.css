@@ -1,86 +1,75 @@
-.hero-header {
+/* frontend/src/components/Intestazione.css */
+.main-header-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: min(1000px, 95%);
+  width: 90%;
+  max-width: 1200px;
   margin: 20px auto;
-  padding: 10px 20px;
-  background: var(--bg-petrolio-dark); /* Tonalità scura richiesta */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px; /* Arrotondamento stile React Bits */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  position: sticky; 
-  top: 20px;       /* Distanza dal bordo superiore della finestra */
-  z-index: 1000;   /* Assicura che stia sopra a tutti gli altri elementi */
-}
-
-.title-block {
-  text-align: center;
-  color: #e8ecf5;
-}
-
-.hero-title {
-  font-size: 1.5rem; /* Più piccola e pulita al centro */
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #bdfcc9;
-  margin: 0;
-}
-
-.title-block .eyebrow {
-  font-size: 0.86rem;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: #a7f3d0;
-  font-weight: 600;
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-}
-
-
-.corner-icon {
-  position: static; /* Rimuoviamo il posizionamento assoluto */
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  text-decoration: none;
+  padding: 12px 30px;
+  
+  /* Sfondo glass universale */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 99px;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
 }
 
-.corner-icon:hover {
-  background: var(--accent-green);
-  transform: translateY(0);
+.brand-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
 }
 
-.corner-left {
-  left: 16px;
+.brand-name {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
-.corner-right {
-  right: 16px;
+/* FIX: Colore Bianco forzato */
+.brand-sub {
+  font-size: 0.65rem;
+  color: #ffffff !important; 
+  opacity: 0.9;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-@media (max-width: 600px) {
-  .hero-header {
-    padding: 14px 18px 6px;
-  }
-
-  .corner-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 1.2rem;
-  }
-
-  /* Nascondiamo scritte extra per pulizia come da immagine */
-.title-block .eyebrow, 
-.title-block .caption {
-  display: none;
+.header-nav {
+  display: flex;
+  gap: 25px;
+  align-items: center;
 }
+
+.nav-link, .theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.nav-link:hover, .theme-toggle:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 768px) {
+  .nav-text { display: none; }
+  .main-header-bar { padding: 12px 20px; }
 }
