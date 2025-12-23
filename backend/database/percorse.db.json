@@ -395,6 +395,22 @@
             "mezzo": "car",
             "start": "Bari BA, Italia",
             "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-23T20:06:24.453855",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-23T20:16:14.787426",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "veicolo_elettrico",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
         }
     ]
 }

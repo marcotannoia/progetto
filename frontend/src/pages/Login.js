@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Intestazione from '../components/Intestazione';
 import './Login.css';
 
 const API_BASE = 'http://localhost:5000';
@@ -40,58 +39,72 @@ function Login({ setUser }) {
 
   return ( 
     <div className="login-page">
-      <Intestazione />
-      <div className="login-card">
-        <form onSubmit={handleAuth} className="login-form">
-          <p className="eyebrow">{isRegister ? 'Registrati' : 'Accedi'}</p>
-          <h1>{isRegister ? 'Crea account EcoTrack' : 'Bentornato su EcoTrack'}</h1>
-          
-          <input 
-            className="login-input" 
-            placeholder="Username" 
-            value={form.username} 
-            onChange={e => setForm({...form, username: e.target.value})} 
-          />
-          
-          <input 
-            className="login-input" 
-            type="password" 
-            placeholder="Password" 
-            value={form.password} 
-            onChange={e => setForm({...form, password: e.target.value})} 
-          />
-          
-          <input 
-            className="login-input" 
-            placeholder="Regione" 
-            value={form.regione} 
-            onChange={e => setForm({...form, regione: e.target.value})} 
-          />
+      
+      <header className="hero-header fade-in">
+        <h1 className="brand-title">EcoTrack</h1>
+        <p className="brand-subtitle">
+          {isRegister ? 'Unisciti al cambiamento' : 'Track your progress'}
+        </p>
+      </header>
 
-          <button className="primary-button">
-            {isRegister ? 'Registrati' : 'Accedi'}
-          </button>
-        </form>
+      <main className="hero-content">
+        <div className="search-card-container">
+          <section className="main-search-card fade-in">
+            <h2 className="card-title">
+              {isRegister ? 'Crea Account' : 'Accedi'}
+            </h2>
+            
+            <form onSubmit={handleAuth} className="login-form-stack">
+              <input 
+                className="card-input" 
+                placeholder="Username" 
+                value={form.username} 
+                onChange={e => setForm({...form, username: e.target.value})} 
+              />
+              
+              <input 
+                className="card-input" 
+                type="password" 
+                placeholder="Password" 
+                value={form.password} 
+                onChange={e => setForm({...form, password: e.target.value})} 
+              />
+              
+              {/* Mostra Regione solo in registrazione se preferisci, o lasciala sempre */}
+              <input 
+                className="card-input" 
+                placeholder="Regione (es. Puglia)" 
+                value={form.regione} 
+                onChange={e => setForm({...form, regione: e.target.value})} 
+              />
 
-        {error && (
-          <div className="login-error">
-            {error}
-          </div>
-        )}
+              <button className="cta-search-btn">
+                {isRegister ? 'Registrati' : 'Accedi'}
+              </button>
+            </form>
 
-        <div className="login-toggle">
-          <p>{isRegister ? 'Hai già un account?' : 'Non hai un account?'}</p>
-          <button 
-            onClick={() => {
-              setIsRegister(!isRegister);
-              setError('');
-            }} 
-            className="toggle-btn"
-          >
-            {isRegister ? 'Vai al Login' : 'Registrati ora'}
-          </button>
+            {error && (
+              <div className="login-error-box">
+                {error}
+              </div>
+            )}
+
+            <div className="login-toggle-area">
+              <p>{isRegister ? 'Hai già un account?' : 'Non hai un account?'}</p>
+              <button 
+                onClick={() => {
+                  setIsRegister(!isRegister);
+                  setError('');
+                }} 
+                className="toggle-link-btn"
+              >
+                {isRegister ? 'Vai al Login' : 'Registrati ora'}
+              </button>
+            </div>
+
+          </section>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
