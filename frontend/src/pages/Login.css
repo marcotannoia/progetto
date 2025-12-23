@@ -31,7 +31,6 @@
   font-weight: 800;
   letter-spacing: -3px;
   line-height: 1.1;
-  /* Default dark mode gradient */
   background: linear-gradient(135deg, var(--text-main) 30%, var(--btn-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -132,7 +131,7 @@
   filter: brightness(1.05);
 }
 
-/* --- ERROR BOX --- */
+/* --- ERROR BOX (Rosso) --- */
 .login-error-box {
   padding: 12px;
   background: rgba(239, 68, 68, 0.15);
@@ -143,6 +142,20 @@
   font-size: 0.9rem;
 }
 
+/* --- SUCCESS BOX (Verde - NUOVO) --- */
+.login-success-box {
+  padding: 12px;
+  background: rgba(16, 185, 129, 0.15); /* Sfondo verde tenue */
+  border: 1px solid rgba(16, 185, 129, 0.4); /* Bordo verde */
+  color: #d1fae5; /* Testo verde chiaro */
+  border-radius: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+/* --- TOGGLE LOGIN/REGISTER --- */
 /* --- TOGGLE LOGIN/REGISTER --- */
 .login-toggle-area {
   display: flex;
@@ -158,34 +171,49 @@
 .login-toggle-area p { margin: 0; }
 
 .toggle-link-btn {
-  background: none;
-  border: none;
+  /* USA !important PER SOVRASCRIVERE LE REGOLE GLOBALI DI APP.CSS */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  
   color: var(--btn-primary);
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  text-decoration: underline;
-  transition: color 0.2s;
+  
+  text-decoration: none;
+  
+  transition: all 0.2s;
   padding: 0;
 }
 
-.toggle-link-btn:hover { color: #fff; }
+.toggle-link-btn:hover {
+  color: #fff;
+  text-decoration: underline;
+  /* Assicuriamo che anche all'hover non appaiano sfondi o bordi */
+  background: transparent !important;
+  box-shadow: none !important;
+}
 
 /* --- FIX PER LIGHT MODE --- */
 .light-mode .brand-title {
-  /* Gradiente da verde a verde chiarissimo/bianco */
   background: linear-gradient(135deg, var(--btn-primary) 20%, #a7f3d0 80%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* Ombra scura per definizione + alone bianco diffuso per l'effetto sfumato */
   filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15)) drop-shadow(0 0 15px rgba(255,255,255, 0.7));
 }
 
 .light-mode .brand-subtitle {
-  /* Sottotitolo verde solido per leggibilità */
   color: #059669;
 }
 
+/* Adatta anche il box verde alla light mode per migliore leggibilità */
+.light-mode .login-success-box {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: #059669;
+  color: #047857; /* Verde scuro per contrasto su sfondo chiaro */
+}
 
 @media (max-width: 600px) {
   .brand-title { font-size: 3rem; }
@@ -197,3 +225,7 @@
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+} 

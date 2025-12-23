@@ -16,16 +16,26 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) 
 
+# --- AUTENTICAZIONE ---
+
 @app.route('/api/login', methods=['POST']) 
 def api_login():
     data = request.get_json() or {}
+    # Chiama la funzione di login nel file login.py
     user = auth_service.login_user(data.get('username'), data.get('password'))
+    
     if user:
         session.permanent = True
         session['username'] = user['username']
-        session['ruolo'] = 'admin' if user.get('role') == 'superuser' else 'utente'
+        session['ruolo'] = user.get('role', 'utente')
         session['regione'] = user.get('regione', '') 
-        return jsonify({"ok": True, "username": user['username'], "ruolo": session['ruolo'], "regione": user.get('regione', '')})
+        return jsonify({
+            "ok": True, 
+            "username": user['username'], 
+            "ruolo": session['ruolo'], 
+            "regione": session['regione']
+        })
+    
     return jsonify({"ok": False, "errore": "Credenziali errate"}), 401
 
 @app.route('/api/registrati', methods=['POST'])
@@ -43,8 +53,24 @@ def api_logout():
 def api_me():
     user = session.get('username')
     if user:
-        return jsonify({"ok": True, "username": user, "ruolo": session.get('ruolo'), "regione": session.get('regione', '')})
+        return jsonify({
+            "ok": True, 
+            "username": user, 
+            "ruolo": session.get('ruolo'), 
+            "regione": session.get('regione', '')
+        })
     return jsonify({"ok": False}), 401
+
+@app.route('/api/utenti', methods=['GET'])
+def get_utenti():
+    try:
+        lista = auth_service.get_users_list() 
+        return jsonify({"ok": True, "utenti": lista})
+    except Exception as e:
+        print(e)
+        return jsonify({"ok": False, "utenti": []})
+
+# --- VEICOLI & NAVIGAZIONE ---
 
 @app.route('/api/veicoli', methods=['GET'])
 def vehicles():
@@ -96,14 +122,13 @@ def navigazione():
         "map_url": map_url
     })
 
-# --- NUOVA ROTTA PER IL PROFILO ---
+# --- STORICO & STATISTICHE ---
+
 @app.route('/api/storico', methods=['GET'])
 def api_storico_completo():
     current_username = session.get('username')
     if not current_username:
         return jsonify({"ok": False, "errore": "Non loggato"}), 401
-    
-    # Recupera TUTTI i viaggi usando la nuova funzione in storico.py
     dati = storico.get_storico_completo(current_username)
     return jsonify(dati) 
 
@@ -118,24 +143,11 @@ def api_wrapped(username):
     stats = storico.genera_wrapped(target_user) 
 
     if not stats:
+        # Se non ci sono dati, stats potrebbe essere un oggetto vuoto, ma se è None gestiamo l'errore
         return jsonify({"ok": False, "messaggio": f"Nessun dato trovato per {target_user}"}), 404 
 
     return jsonify({"ok": True, "dati": stats, "target": target_user})
 
-@app.route('/api/utenti/cerca', methods=['GET'])
-def cerca_utenti():
-    nomi = storico.lista_utenti_con_dati()
-    return jsonify({"ok": True, "utenti": nomi})
-
-@app.route('/api/utenti', methods=['GET'])
-def get_utenti():
-    try:
-        lista = auth_service.get_users_list() 
-        return jsonify({"ok": True, "utenti": lista})
-    except Exception as e:
-        print(e)
-        return jsonify({"ok": False, "utenti": []})
-    
 @app.route('/api/calcolo-alberi', methods=['POST'])
 def api_calcolo_alberi():
     data = request.get_json() or {}

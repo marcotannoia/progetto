@@ -253,17 +253,17 @@
   min-width: 450px;
   background: #111111;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 50px 40px;
+  padding: 40px 30px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 30px;
+  gap: 20px; 
   position: relative;
   box-shadow: -20px 0 50px rgba(0,0,0,0.5);
 }
 
 .stat-box {
-  padding: 35px;
+  padding: 25px; 
   border-radius: 24px;
   position: relative;
   overflow: hidden;
@@ -281,53 +281,72 @@
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+/* MODIFICA: Label bianco puro per ENTRAMBE le box */
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 3px;
-  opacity: 0.7;
-  margin-bottom: 10px;
-  font-weight: 600;
+  color: #ffffff;   /* Bianco puro */
+  opacity: 1;       /* Nessuna trasparenza */
+  margin-bottom: 8px;
+  font-weight: 700; 
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
+/* MODIFICA: Numero gigante bianco puro (NO GRADIENTE) */
 .stat-giant {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 4.5rem;
+  font-size: 3rem; 
   font-weight: 800;
   display: block;
   line-height: 1;
-  margin-bottom: 10px;
-  background: linear-gradient(90deg, #fff, #9ca3af);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  
+  color: #ffffff; /* Bianco solido */
+  background: none; /* Rimosso gradiente */
+  -webkit-text-fill-color: initial; /* Reset per colore solido */
+  
+  word-wrap: break-word; 
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Leggera ombra per stacco */
 }
 
-.stat-sub { font-size: 0.95rem; color: #9ca3af; line-height: 1.5; }
+/* MODIFICA: Sottotitolo più chiaro */
+.stat-sub { 
+  font-size: 0.85rem; 
+  color: #d1d5db; /* Grigio chiaro leggibile */
+  line-height: 1.4; 
+}
 
 .tree-icon-bg {
   position: absolute;
   top: 20px; right: 20px;
-  font-size: 4rem; opacity: 0.2; filter: grayscale(1);
+  font-size: 3rem; 
+  opacity: 0.2; 
+  filter: grayscale(1);
 }
 
 .stat-desc {
-  font-size: 1.1rem; font-weight: 500; color: #e5e7eb; line-height: 1.5;
+  font-size: 0.95rem; 
+  font-weight: 500; 
+  color: #e5e7eb; 
+  line-height: 1.4;
 }
 
 .new-search-btn {
   margin-top: auto;
-  width: 100%; height: 80px;
+  width: 100%; height: 70px; 
   background: var(--btn-primary);
   color: #fff;
   border: none; border-radius: 20px;
-  font-size: 1.2rem; font-weight: 800; letter-spacing: 1px;
+  font-size: 1.1rem; 
+  font-weight: 800; letter-spacing: 1px;
   cursor: pointer;
   box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
   transition: all 0.2s ease;
   display: flex; align-items: center; justify-content: center; gap: 10px;
 }
 .new-search-btn:hover { transform: scale(1.02); box-shadow: 0 15px 50px rgba(16, 185, 129, 0.4); filter: brightness(1.1); }
-.new-search-btn::before { content: "↺"; font-size: 1.5rem; }
+.new-search-btn::before { content: "↺"; font-size: 1.3rem; }
 
 .close-icon {
   position: absolute; top: 30px; right: 30px;
@@ -355,7 +374,7 @@
   .results-content-card { flex-direction: column; }
   .res-left { height: 40%; flex: none; }
   .res-right { height: 60%; flex: none; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); }
-  .stat-giant { font-size: 3.5rem; }
+  .stat-giant { font-size: 2.5rem; } 
 }
 
 @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }

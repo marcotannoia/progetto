@@ -42,12 +42,20 @@ def genera_wrapped(username):
     db = carica_db()
     viaggi_completi = db.get(username, [])
     
-    if not viaggi_completi:
-        return None
-
     now = datetime.now() 
     start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
     data_inizio_formattata = start_of_month.strftime("%d/%m/%Y")
+
+    # FIX: Se l'utente non ha viaggi, restituisci oggetto VUOTO con zeri
+    if not viaggi_completi:
+        return {
+            "totale_co2": 0.0, 
+            "totale_km": 0.0, 
+            "numero_viaggi": 0, 
+            "mezzo_preferito": "Nessuno",
+            "data_inizio": data_inizio_formattata,
+            "ultimo_viaggio": "-"
+        }
 
     viaggi = []
     for v in viaggi_completi:
@@ -58,13 +66,15 @@ def genera_wrapped(username):
         except ValueError: 
             continue
 
+    # Se dopo il filtro data non ci sono viaggi
     if not viaggi:
         return {
             "totale_co2": 0.0, 
             "totale_km": 0.0, 
             "numero_viaggi": 0, 
             "mezzo_preferito": "Nessuno",
-            "data_inizio": data_inizio_formattata 
+            "data_inizio": data_inizio_formattata,
+            "ultimo_viaggio": "-"
         }
 
     totale_co2 = sum(v['co2'] for v in viaggi) 
@@ -113,8 +123,6 @@ def get_classifica_risparmio():
     classifica.sort(key=lambda x: x['risparmio'], reverse=True)
     return classifica
 
-# --- NUOVA FUNZIONE ---
 def get_storico_completo(username):
-    """Restituisce TUTTI i viaggi di un utente, senza filtri di data"""
     db = carica_db()
     return db.get(username, [])

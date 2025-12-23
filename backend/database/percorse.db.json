@@ -1,424 +1,90 @@
 {
-    "licia": [
-        {
-            "data": "2025-12-09T19:14:19.898261",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        }
-    ],
     "marco": [
         {
-            "data": "2025-12-09T19:15:27.789604",
-            "co2": 105.929,
+            "data": "2025-12-23T20:50:42.378136",
+            "co2": 141.238,
             "km": 882.738,
             "mezzo": "car",
             "start": "Bari BA, Italia",
             "end": "Milano MI, Italia"
         },
         {
-            "data": "2025-12-09T19:15:29.284083",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
+            "data": "2025-12-23T21:12:32.167246",
+            "co2": 0.0,
+            "km": 222.494,
+            "mezzo": "piedi",
+            "start": "Foggia FG, Italia",
+            "end": "Taranto TA, Italia"
+        }
+    ],
+    "licia": [
         {
-            "data": "2025-12-10T11:51:26.204773",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T11:51:35.687495",
-            "co2": 60.026,
-            "km": 882.738,
+            "data": "2025-12-23T20:51:56.311894",
+            "co2": 0.0,
+            "km": 457.017,
             "mezzo": "public_bus",
             "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
+            "end": "Roma RM, Italia"
         },
         {
-            "data": "2025-12-10T11:51:38.301723",
+            "data": "2025-12-23T20:53:45.945124",
             "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "veicolo_elettrico",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:02:22.516153",
-            "co2": 1371.267,
-            "km": 11427.224,
-            "mezzo": "car",
-            "start": "Distretto di B\u00e1ru\u00e8, Mozambico",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:04:03.795885",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "piedi",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:11:47.011878",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:11:47.235234",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:11:48.489692",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:13:56.498061",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:15:20.992352",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:16:34.717557",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:17:33.006039",
-            "co2": 60.026,
-            "km": 882.738,
+            "km": 133.618,
             "mezzo": "public_bus",
             "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
+            "end": "Foggia FG, Italia"
+        }
+    ],
+    "luca": [
         {
-            "data": "2025-12-10T12:47:43.803937",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-10T12:47:51.321188",
+            "data": "2025-12-23T20:59:19.299327",
             "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "piedi",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:28:39.767006",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:28:59.213707",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:33:43.667184",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:37:40.283281",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:39:30.569554",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:40:27.386415",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "piedi",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:41:28.326479",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:44:38.705250",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:44:54.661972",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "veicolo_elettrico",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:45:00.287528",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "bike",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:45:05.549725",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "piedi",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:45:14.734097",
-            "co2": 60.026,
-            "km": 882.738,
+            "km": 433.741,
             "mezzo": "public_bus",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T11:45:57.585551",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "piedi",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-12T17:57:53.687353",
-            "co2": 11.994,
-            "km": 99.952,
-            "mezzo": "car",
-            "start": "71042 Cerignola FG, Italia",
+            "start": "Roma RM, Italia",
             "end": "Bari BA, Italia"
+        },
+        {
+            "data": "2025-12-23T21:01:01.712207",
+            "co2": 0.0,
+            "km": 457.017,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Roma RM, Italia"
+        },
+        {
+            "data": "2025-12-23T21:02:18.316229",
+            "co2": 0.0,
+            "km": 575.958,
+            "mezzo": "public_bus",
+            "start": "Roma RM, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-23T21:03:47.282515",
+            "co2": 0.0,
+            "km": 882.738,
+            "mezzo": "public_bus",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
         }
     ],
     "daniele": [
         {
-            "data": "2025-12-10T10:29:41.310530",
-            "co2": 60.026,
-            "km": 882.738,
+            "data": "2025-12-23T21:06:49.721889",
+            "co2": 0.0,
+            "km": 98.117,
             "mezzo": "public_bus",
             "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
+            "end": "71042 Cerignola FG, Italia"
         },
         {
-            "data": "2025-12-10T10:30:12.788804",
-            "co2": 105.929,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-16T18:11:31.223558",
+            "data": "2025-12-23T21:10:31.192525",
             "co2": 0.0,
-            "km": 884.962,
+            "km": 991.75,
             "mezzo": "public_bus",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T11:38:02.634219",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T12:56:41.217690",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:05:00.518035",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "veicolo_elettrico",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:05:07.348150",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "public_bus",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:05:17.523961",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:08:26.755431",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:13:04.253569",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:14:40.507630",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T13:15:33.451848",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T14:18:47.149884",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T15:36:35.093880",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T19:10:10.532904",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T19:49:34.519904",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T19:52:48.876036",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T20:00:21.614937",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T20:06:24.453855",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T20:16:14.787426",
-            "co2": 0.0,
-            "km": 882.738,
-            "mezzo": "veicolo_elettrico",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
-        },
-        {
-            "data": "2025-12-23T20:31:55.966956",
-            "co2": 141.238,
-            "km": 882.738,
-            "mezzo": "car",
-            "start": "Bari BA, Italia",
-            "end": "Milano MI, Italia"
+            "start": "71042 Cerignola FG, Italia",
+            "end": "23041 Livigno SO, Italia"
         }
     ]
 }

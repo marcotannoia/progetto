@@ -13,6 +13,6 @@ def calcoloCO2(distanza_km, mezzo):
     if mezzo in ['bike', 'piedi', 'veicolo_elettrico']:
         return (" Bravo! Nessuna emissione di CO2 per questo mezzo.")
     elif mezzo in ['public_bus']: 
-        return("Hai consumato poco complimenti! Le emissioni vengono divise tra i passeggeri nel trasporto pubblico.")
+        return("Le emissioni vengono divise tra i passeggeri nel trasporto pubblico! Bravo!")
     kg_co2 = distanza_km * emissioni_per_km[mezzo] # algoritmo di calcolo
     return round(kg_co2, 3) 

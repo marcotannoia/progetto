@@ -7,11 +7,16 @@ function Login({ setUser }) {
   const [form, setForm] = useState({ username: '', password: '', regione: '' });
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleAuth = async (e) => {
     e.preventDefault();
     const endpoint = isRegister ? '/api/registrati' : '/api/login';
     
+    // Resetta messaggi
+    setError('');
+    setSuccess('');
+
     try {
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
@@ -25,7 +30,7 @@ function Login({ setUser }) {
       if (data.ok) {
         if (isRegister) {
           setIsRegister(false);
-          setError("Registrazione avvenuta! Ora puoi accedere.");
+          setSuccess("Registrazione avvenuta con successo! Ora puoi accedere.");
         } else {
           setUser(data);
         }
@@ -70,7 +75,6 @@ function Login({ setUser }) {
                 onChange={e => setForm({...form, password: e.target.value})} 
               />
               
-              {/* Mostra Regione solo in registrazione se preferisci, o lasciala sempre */}
               <input 
                 className="card-input" 
                 placeholder="Regione (es. Puglia)" 
@@ -89,12 +93,19 @@ function Login({ setUser }) {
               </div>
             )}
 
+            {success && (
+              <div className="login-success-box">
+                {success}
+              </div>
+            )}
+
             <div className="login-toggle-area">
               <p>{isRegister ? 'Hai già un account?' : 'Non hai un account?'}</p>
               <button 
                 onClick={() => {
                   setIsRegister(!isRegister);
                   setError('');
+                  setSuccess('');
                 }} 
                 className="toggle-link-btn"
               >

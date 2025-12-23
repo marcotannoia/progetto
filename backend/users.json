@@ -4,5 +4,23 @@
         "password": "scrypt:32768:8:1$GVHbcP4u6VBD0ZGd$5e8e0f42bb8b049afe7b52ecde486eac265ef68173f3d32025e94f038520982e6b8a32e9df0e19d056df4168b1fd1222c24a78de6a5bf9c16ddbf656d19ed67f",
         "regione": "puglia",
         "role": "utente"
+    },
+    "marco": {
+        "username": "marco",
+        "password": "scrypt:32768:8:1$y8TUoCr1caQWbJfa$b5bf2ae8a0a21c505393a8173d4dd7aa43790172544505dafd5852accebc02dd0f0b67d766f098d45b35472ba39aa9996ecda6342a0c0b274f3449107ebfdaed",
+        "regione": "puglia",
+        "role": "utente"
+    },
+    "licia": {
+        "username": "licia",
+        "password": "scrypt:32768:8:1$UjFFAEziOsd6gQsq$b4485fba700aa38ebb5fa9cb8c18529302aedc7bb6e96ce2efd59121766a57975ed24f9b247e6d749ec35c4280fffafd28766ceb4bd3e4675562bf05f806ce85",
+        "regione": "molise",
+        "role": "utente"
+    },
+    "luca": {
+        "username": "luca",
+        "password": "scrypt:32768:8:1$XJRMxwLdwGkHk2hJ$b1d71c46b00beecf988442638c72e54caf1165f00d3865d35bd5de8ebea7dde9a96adcd2e858a4f2fa4f7d5491b17a7e520ff2d5b874b28a47b81473aa077746",
+        "regione": "puglia",
+        "role": "utente"
     }
 }
