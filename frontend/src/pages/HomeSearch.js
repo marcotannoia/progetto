@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Intestazione from '../components/Intestazione';
 import './HomeSearch.css';
 
 const API_BASE = 'http://localhost:5000';
@@ -50,12 +49,11 @@ function HomeSearch({ user, theme, toggleTheme }) {
 
   return (
     <div className="search-page">
-      <Intestazione theme={theme} toggleTheme={toggleTheme} />
+      {/* NAVBAR RIMOSSA */}
 
       <div className="hero-content-search">
         <div className="search-dashboard">
           
-          {/* SEZIONE 1: Barra di Ricerca - Ora più tondeggiante */}
           <div className="search-panel">
             <div className="search-label-tag">SEARCH</div>
             <h2>Trova utenti sostenibili</h2>
@@ -81,7 +79,6 @@ function HomeSearch({ user, theme, toggleTheme }) {
             )}
           </div>
 
-          {/* SEZIONE 2: Hall of Fame - Senza scalette, solo lista */}
           <div className="leaderboard-panel">
             <div className="lb-header">
               <span className="lb-tag">TOP 3</span>

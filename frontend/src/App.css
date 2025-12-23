@@ -1,34 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
+/* === FIX SCROLL BLOCCATO === */
+/* Questo impedisce alla pagina di muoversi/rimbalzare */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* BLOCCA LO SCROLL GLOBALE DEL BROWSER */
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root { --transition-speed: 0.3s; }
 
+/* === TEMA SCURO (NOTTE) === */
 .dark-theme {
-  --text-main: #e8f5e9;
-  --card-bg: rgba(6, 24, 14, 0.5); 
-  --input-bg: rgba(0,0,0,0.3);
+  --text-main: #e8f5e9;                  
+  --text-secondary: #bbf7d0;             
+  
+  --card-bg: rgba(6, 24, 14, 0.6);       
+  --card-border: 1px solid rgba(255,255,255,0.1); 
+  
+  --input-bg: rgba(0, 0, 0, 0.4);
+  --input-text: #ffffff;
+  --input-border: 1px solid rgba(255,255,255,0.2);
+  
   --btn-primary: #22c55e;
+  --btn-text: #000000;
+  --btn-border: none;
 }
 
+/* === TEMA CHIARO (GIORNO) === */
 .light-theme {
-  /* Adattiamo il testo per essere leggibile sullo sfondo verde acceso */
-  --text-main: #ffffff; 
-  --card-bg: rgba(255, 255, 255, 0.2); 
-  --input-bg: rgba(255, 255, 255, 0.3);
+  --text-main: #022c22; 
+  --text-secondary: #064e3b;
+
+  /* Sfondo Card: Menta chiarissimo al 85% di opacità */
+  --card-bg: rgba(236, 253, 245, 0.85); 
+  
+  --card-border: 2px solid #000000;
+
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-text: #000000;
+  --input-border: 2px solid #000000;
+
   --btn-primary: #10b981;
+  --btn-text: #ffffff;
+  --btn-border: 2px solid #000000;
 }
 
 .app-shell {
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%; /* FIX: Usiamo % invece di vw per evitare scroll orizzontale */
+  height: 100vh;
   font-family: 'Space Grotesk', sans-serif;
-  
-  /* Rimuoviamo qualsiasi colore di sfondo qui, lasciamo fare a Iridescence */
   background-color: transparent; 
-  
   color: var(--text-main);
-  overflow-x: hidden;
+  overflow: hidden; /* Assicura che nulla esca dai bordi */
   position: relative;
 }
 
@@ -41,6 +69,23 @@
   z-index: 1;
 }
 
+/* === CLASSI GENERICHE PER UI BOX === */
+.card, .box-container, input, button, select {
+  transition: all var(--transition-speed) ease;
+}
+
+/* Stile forzato per input e bottoni standard */
+input, select, textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border: var(--input-border) !important;
+}
+
+button {
+  border: var(--btn-border) !important;
+}
+
+/* Animazioni */
 .fade-in { animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }

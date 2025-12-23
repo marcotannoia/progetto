@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Intestazione from '../components/Intestazione';
 import './Profile.css';
 
 const API_BASE = 'http://localhost:5000';
@@ -23,7 +22,7 @@ function Profile({ user, setUser }) {
 
   return (
     <div className="profile-page">
-      <Intestazione />
+      {/* NAVBAR RIMOSSA */}
 
       <section className="profile-hero">
         <p className="eyebrow">Il tuo profilo</p>
@@ -67,6 +66,7 @@ function Profile({ user, setUser }) {
         )}
       </section>
 
+      {/* Il Logout qui rimane come "backup", anche se c'è nel Dock */}
       <button onClick={handleLogout} className="primary-button logout-btn">
         Logout
       </button>

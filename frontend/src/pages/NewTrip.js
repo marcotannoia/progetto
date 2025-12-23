@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Intestazione from '../components/Intestazione';
 import './NewTrip.css';
 
 const API_BASE = 'http://localhost:5000';
 
-// Icone Veicoli SVG
+// Icone Veicoli SVG - "Piedi" AGGIORNATA
 const VehicleIcons = {
-  piedi: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 20c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/><path d="M14 20c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/><path d="M7 16l4-2.5"/><path d="M15 12l-2-4h-3l-2 5"/></svg>,
+  // NUOVA ICONA: Persona che cammina (più chiara e dinamica)
+  piedi: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13" cy="4" r="2"/><path d="M16 8h-3a2 2 0 0 0-2 2v3l-3 7"/><path d="M11 13l3 7"/><path d="M13 8l4 6"/></svg>,
+  
   bike: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6l-5 5.5"/><path d="M15 6a2 2 0 0 1 2 2v4"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>,
   car: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 16H9m10 0h3v-3.15a1 1 0 00-.84-.99L16 11l-2.7-3.6a1 1 0 00-.8-.4H5.24a2 2 0 00-1.8 1.1l-.8 1.63A6 6 0 002 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>,
   public_bus: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>,
@@ -57,7 +58,12 @@ function NewTrip({ user, theme, toggleTheme }) {
 
   return (
     <div className="newtrip-page">
-      <Intestazione theme={theme} toggleTheme={toggleTheme} />
+      
+      {/* HERO SECTION AGGIUNTA */}
+      <header className="hero-header fade-in">
+        <h1 className="brand-title">EcoTrack</h1>
+        <p className="brand-subtitle">Track your progress</p>
+      </header>
 
       <main className="hero-content">
         <div className="search-card-container">
@@ -102,7 +108,7 @@ function NewTrip({ user, theme, toggleTheme }) {
         <div className="leaf-decoration"></div>
       </main>
 
-      {/* Overlay Risultati - MODIFICATO PER DASHBOARD GRANDE */}
+      {/* Overlay Risultati */}
       {risultato && (
         <section className="results-overlay fade-in">
           <div className="results-content-card">
