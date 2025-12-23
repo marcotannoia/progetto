@@ -2,9 +2,9 @@ import json
 import os
 from datetime import datetime 
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'database', 'percorse.db.json') # gli assegno questo percorso per salvare le cose
+DB_PATH = os.path.join(os.path.dirname(__file__), 'database', 'percorse.db.json') 
 
-def carica_db(): # funzione per caricare nel database
+def carica_db(): 
     if not os.path.exists(DB_PATH):
         return {}
     try:
@@ -13,21 +13,20 @@ def carica_db(): # funzione per caricare nel database
     except:
         return {}
 
-def salva_db(db): # questa funzione salva il database
+def salva_db(db): 
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     with open(DB_PATH, 'w') as f:
         json.dump(db, f, indent=4)
 
-def registra_viaggio(username, co2, km, mezzo, start, end): # salvataggio del viaggio nel db
+def registra_viaggio(username, co2, km, mezzo, start, end): 
     db = carica_db()
     
-    if username not in db: # se non esiste l'utente lo creo vuoto
+    if username not in db: 
         db[username] = []
     
-    
-    valore_co2 = co2 if isinstance(co2, (int, float)) else 0.0 # voglio capire se co2 e un numero altrimenti lo salvo a 0
+    valore_co2 = co2 if isinstance(co2, (int, float)) else 0.0 
 
-    viaggio = { # qui creo la classe de viaggio che ha anche l'attributo data per farmi capire quandoe  stao fatto
+    viaggio = { 
         "data": datetime.now().isoformat(),
         "co2": float(valore_co2),
         "km": float(km),
@@ -36,10 +35,10 @@ def registra_viaggio(username, co2, km, mezzo, start, end): # salvataggio del vi
         "end": end
     }
     
-    db[username].append(viaggio)  # lo aggiungo alla fine della lista dei viaggi dell'utente
+    db[username].append(viaggio)  
     salva_db(db)
 
-def genera_wrapped(username): # genero un wrapped con cadenza mensile
+def genera_wrapped(username): 
     db = carica_db()
     viaggi_completi = db.get(username, [])
     
@@ -47,18 +46,17 @@ def genera_wrapped(username): # genero un wrapped con cadenza mensile
         return None
 
     now = datetime.now() 
-    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) # lo faccio qio
+    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
     data_inizio_formattata = start_of_month.strftime("%d/%m/%Y")
 
     viaggi = []
     for v in viaggi_completi:
         try:
-            viaggio_data = datetime.fromisoformat(v['data']) # qui devo convertire come e fatta la data e gestisco l'errore di ancora e un formato sbagliato
+            viaggio_data = datetime.fromisoformat(v['data']) 
             if viaggio_data >= start_of_month:
                 viaggi.append(v)
         except ValueError: 
             continue
-
 
     if not viaggi:
         return {
@@ -69,13 +67,12 @@ def genera_wrapped(username): # genero un wrapped con cadenza mensile
             "data_inizio": data_inizio_formattata 
         }
 
-    totale_co2 = sum(v['co2'] for v in viaggi) # qui faccio i calcoli che devo fare x forza
+    totale_co2 = sum(v['co2'] for v in viaggi) 
     totale_km = sum(v['km'] for v in viaggi)
     numero_viaggi = len(viaggi)
     
- 
     mezzi_usati = [v['mezzo'] for v in viaggi]
-    mezzo_preferito = max(set(mezzi_usati), key=mezzi_usati.count) if mezzi_usati else "Nessuno" # algoritmo per scegliere il piu usato
+    mezzo_preferito = max(set(mezzi_usati), key=mezzi_usati.count) if mezzi_usati else "Nessuno" 
 
     return { 
         "totale_co2": round(totale_co2, 2),
@@ -86,15 +83,13 @@ def genera_wrapped(username): # genero un wrapped con cadenza mensile
         "data_inizio": data_inizio_formattata 
     }
 
-def leggi_tutti_utenti(): # mi serve per edere chi sta loggato  nel db
+def leggi_tutti_utenti(): 
     db = carica_db()
     return list(db.keys())  
 
 def get_classifica_risparmio():
     db = carica_db()
     classifica = []
-    
-    # Valore preso dal tuo calcoloCO2.py (auto media)
     CO2_AUTO_PER_KM = 0.120 
 
     for username, viaggi in db.items():
@@ -103,25 +98,23 @@ def get_classifica_risparmio():
         for v in viaggi:
             km = float(v.get('km', 0))
             co2_emessa = float(v.get('co2', 0))
-            
-            # Calcolo teorico: quanto avrebbe inquinato in auto?
             co2_teorica_auto = km * CO2_AUTO_PER_KM
-            
-            # Il risparmio è la differenza
             risparmio = co2_teorica_auto - co2_emessa
             
-            # Aggiungiamo solo se c'è un risparmio effettivo
             if risparmio > 0:
                 co2_risparmiata_totale += risparmio
                 
-        # Inseriamo in classifica solo chi ha effettivamente risparmiato qualcosa
         if co2_risparmiata_totale > 0:
             classifica.append({
                 "username": username,
                 "risparmio": round(co2_risparmiata_totale, 2)
             })
     
-    # Ordina decrescente (chi ha risparmiato di più in cima)
     classifica.sort(key=lambda x: x['risparmio'], reverse=True)
-    
     return classifica
+
+# --- NUOVA FUNZIONE ---
+def get_storico_completo(username):
+    """Restituisce TUTTI i viaggi di un utente, senza filtri di data"""
+    db = carica_db()
+    return db.get(username, [])

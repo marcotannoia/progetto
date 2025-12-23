@@ -14,7 +14,6 @@
   position: relative;
   padding: 0 20px;
 
-  /* MODIFICA: 50px come Login.css per allineare tutto in alto */
   padding-top: 50px; 
 }
 
@@ -338,6 +337,18 @@
   cursor: pointer; z-index: 100; transition: all 0.2s; display: grid; place-items: center;
 }
 .close-icon:hover { background: #ef4444; border-color: #ef4444; transform: rotate(90deg); }
+
+/* --- FIX PER LIGHT MODE --- */
+.light-mode .brand-title {
+  background: linear-gradient(135deg, var(--btn-primary) 20%, #a7f3d0 80%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.15)) drop-shadow(0 0 15px rgba(255,255,255, 0.7));
+}
+
+.light-mode .brand-subtitle {
+  color: #059669;
+}
 
 @media (max-width: 600px) {
   .newtrip-page { padding-top: 30px; }
