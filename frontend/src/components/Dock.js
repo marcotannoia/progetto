@@ -1,3 +1,4 @@
+// TUTTO PRESO DA REACT
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'motion/react';
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 import './Dock.css';
@@ -83,7 +84,7 @@ export default function Dock({
   const mouseX = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
 
-  // Calcoli altezza rimossi per l'outer, lasciamo fare al CSS
+
   
   return (
     <motion.div className="dock-outer">
@@ -98,7 +99,7 @@ export default function Dock({
         }}
         className={`dock-panel ${className}`}
         
-        // FIX: Altezza AUTO per adattarsi alle icone che crescono
+ 
         style={{ height: 'auto', minHeight: panelHeight }}
         
         role="toolbar"

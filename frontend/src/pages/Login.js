@@ -1,54 +1,65 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-const API_BASE = 'http://localhost:5000';
+const URL_SERVER = 'http://localhost:5000'; // Costante per il backend
 
-function Login({ setUser }) {
-  const [form, setForm] = useState({ username: '', password: '', regione: '' });
-  const [isRegister, setIsRegister] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+// Rinomino la prop in ingresso per coerenza interna
+function PaginaAccesso({ setUser: impostaUtenteLoggato }) {
+  
+  // Stati per la gestione del form e dell'interfaccia
+  const [datiInput, setDatiInput] = useState({ username: '', password: '', regione: '' });
+  const [modalitaRegistrazione, setModalitaRegistrazione] = useState(false);
+  const [messaggioErrore, setMessaggioErrore] = useState('');
+  const [messaggioSuccesso, setMessaggioSuccesso] = useState('');
 
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    const endpoint = isRegister ? '/api/registrati' : '/api/login';
+  const gestisciAuth = async (e) => {
+    e.preventDefault(); // non si aggiorna a caso
     
-    // Resetta messaggi
-    setError('');
-    setSuccess('');
+
+    const endpoint = modalitaRegistrazione ? '/api/registrati' : '/api/login'; // endopoint possibili
+    
+
+    setMessaggioErrore(''); // reset messaggi
+    setMessaggioSuccesso('');
 
     try {
-      const res = await fetch(`${API_BASE}${endpoint}`, {
+      const risposta = await fetch(`${URL_SERVER}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(form)
+        body: JSON.stringify(datiInput)
       });
       
-      const data = await res.json();
+      const datiRisposta = await risposta.json();
       
-      if (data.ok) {
-        if (isRegister) {
-          setIsRegister(false);
-          setSuccess("Registrazione avvenuta con successo! Ora puoi accedere.");
+      if (datiRisposta.ok) {
+        if (modalitaRegistrazione) {
+          setModalitaRegistrazione(false); 
+          setMessaggioSuccesso("Registrazione avvenuta con successo! Ora puoi accedere."); //vai al login
         } else {
-          setUser(data);
+          impostaUtenteLoggato(datiRisposta); // setta l'utente loggato
         }
       } else {
-        setError(data.errore || "Errore durante l'operazione");
+        setMessaggioErrore(datiRisposta.errore || "Si è verificato un errore."); //errore generico
       }
     } catch (err) {
-      setError("Errore di connessione al server");
+      console.error(err);
+      setMessaggioErrore("Impossibile connettersi al server.");
     }
   };
 
-  return ( 
+
+  const aggiornaCampo = (campo, valore) => {
+    setDatiInput(prev => ({ ...prev, [campo]: valore }));
+  };
+
+  return ( //frontend
     <div className="login-page">
       
       <header className="hero-header fade-in">
         <h1 className="brand-title">EcoTrack</h1>
         <p className="brand-subtitle">
-          {isRegister ? 'Unisciti al cambiamento' : 'Track your progress'}
+          {modalitaRegistrazione ? 'Unisciti al cambiamento' : 'Monitora i tuoi progressi'}
         </p>
       </header>
 
@@ -56,60 +67,61 @@ function Login({ setUser }) {
         <div className="search-card-container">
           <section className="main-search-card fade-in">
             <h2 className="card-title">
-              {isRegister ? 'Crea Account' : 'Accedi'}
+              {modalitaRegistrazione ? 'Crea Account' : 'Accedi'}
             </h2>
             
-            <form onSubmit={handleAuth} className="login-form-stack">
+            <form onSubmit={gestisciAuth} className="login-form-stack">
               <input 
                 className="card-input" 
                 placeholder="Username" 
-                value={form.username} 
-                onChange={e => setForm({...form, username: e.target.value})} 
+                value={datiInput.username} 
+                onChange={e => aggiornaCampo('username', e.target.value)} 
               />
               
               <input 
                 className="card-input" 
                 type="password" 
                 placeholder="Password" 
-                value={form.password} 
-                onChange={e => setForm({...form, password: e.target.value})} 
+                value={datiInput.password} 
+                onChange={e => aggiornaCampo('password', e.target.value)} 
               />
               
+        
               <input 
                 className="card-input" 
                 placeholder="Regione (es. Puglia)" 
-                value={form.regione} 
-                onChange={e => setForm({...form, regione: e.target.value})} 
+                value={datiInput.regione} 
+                onChange={e => aggiornaCampo('regione', e.target.value)} 
               />
 
               <button className="cta-search-btn">
-                {isRegister ? 'Registrati' : 'Accedi'}
+                {modalitaRegistrazione ? 'Registrati' : 'Accedi'}
               </button>
             </form>
 
-            {error && (
+            {messaggioErrore && (
               <div className="login-error-box">
-                {error}
+                {messaggioErrore}
               </div>
             )}
 
-            {success && (
+            {messaggioSuccesso && (
               <div className="login-success-box">
-                {success}
+                {messaggioSuccesso}
               </div>
             )}
 
             <div className="login-toggle-area">
-              <p>{isRegister ? 'Hai già un account?' : 'Non hai un account?'}</p>
+              <p>{modalitaRegistrazione ? 'Hai già un account?' : 'Non hai un account?'}</p>
               <button 
                 onClick={() => {
-                  setIsRegister(!isRegister);
-                  setError('');
-                  setSuccess('');
+                  setModalitaRegistrazione(!modalitaRegistrazione);
+                  setMessaggioErrore('');
+                  setMessaggioSuccesso('');
                 }} 
                 className="toggle-link-btn"
               >
-                {isRegister ? 'Vai al Login' : 'Registrati ora'}
+                {modalitaRegistrazione ? 'Vai al Login' : 'Registrati ora'}
               </button>
             </div>
 
@@ -120,4 +132,4 @@ function Login({ setUser }) {
   );
 }
 
-export default Login;
+export default PaginaAccesso;

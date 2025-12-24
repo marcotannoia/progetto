@@ -31,6 +31,46 @@
             "mezzo": "public_bus",
             "start": "71042 Cerignola FG, Italia",
             "end": "71045 Orta Nova FG, Italia"
+        },
+        {
+            "data": "2025-12-24T13:58:07.273230",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-24T14:04:24.954353",
+            "co2": 73.123,
+            "km": 457.017,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Roma RM, Italia"
+        },
+        {
+            "data": "2025-12-24T14:43:12.694722",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-24T15:01:51.331550",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-24T15:10:10.320924",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
         }
     ],
     "licia": [
@@ -111,6 +151,30 @@
             "mezzo": "bike",
             "start": "Viale di Levante, 71042 Cerignola FG, Italia",
             "end": "Via dei Mille, 71042 Cerignola FG, Italia"
+        },
+        {
+            "data": "2025-12-24T10:55:02.733392",
+            "co2": 0.0,
+            "km": 30.487,
+            "mezzo": "bike",
+            "start": "71042 Cerignola FG, Italia",
+            "end": "85024 Lavello PZ, Italia"
+        },
+        {
+            "data": "2025-12-24T10:55:28.469868",
+            "co2": 4.878,
+            "km": 30.487,
+            "mezzo": "car",
+            "start": "71042 Cerignola FG, Italia",
+            "end": "85024 Lavello PZ, Italia"
+        },
+        {
+            "data": "2025-12-24T10:57:16.385993",
+            "co2": 0.0,
+            "km": 850.774,
+            "mezzo": "public_bus",
+            "start": "Genova GE, Italia",
+            "end": "Foggia FG, Italia"
         }
     ]
 }

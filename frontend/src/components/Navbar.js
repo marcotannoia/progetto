@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; 
 import './Navbar.css';
 
 function Navbar() {
@@ -27,3 +27,4 @@ function Navbar() {
 }
 
 export default Navbar;
+// TUTTO PRESO DA REACT

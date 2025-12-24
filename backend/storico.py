@@ -42,31 +42,20 @@ def genera_wrapped(username):
     db = carica_db()
     viaggi_completi = db.get(username, [])
     
-    now = datetime.now() 
-    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
-    data_inizio_formattata = start_of_month.strftime("%d/%m/%Y")
+    ora = datetime.now() 
+    inizio_mese = ora.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+    data_inizio_formattata = inizio_mese.strftime("%d/%m/%Y")
 
-    # FIX: Se l'utente non ha viaggi, restituisci oggetto VUOTO con zeri
-    if not viaggi_completi:
-        return {
-            "totale_co2": 0.0, 
-            "totale_km": 0.0, 
-            "numero_viaggi": 0, 
-            "mezzo_preferito": "Nessuno",
-            "data_inizio": data_inizio_formattata,
-            "ultimo_viaggio": "-"
-        }
-
+    # solo viaggi del mese
     viaggi = []
     for v in viaggi_completi:
         try:
-            viaggio_data = datetime.fromisoformat(v['data']) 
-            if viaggio_data >= start_of_month:
+            if datetime.fromisoformat(v['data']) >= inizio_mese:
                 viaggi.append(v)
-        except ValueError: 
+        except (ValueError, KeyError): 
             continue
 
-    # Se dopo il filtro data non ci sono viaggi
+     # se non ci sono viaggi nel mese 
     if not viaggi:
         return {
             "totale_co2": 0.0, 
@@ -76,28 +65,26 @@ def genera_wrapped(username):
             "data_inizio": data_inizio_formattata,
             "ultimo_viaggio": "-"
         }
-
+    
     totale_co2 = sum(v['co2'] for v in viaggi) 
     totale_km = sum(v['km'] for v in viaggi)
-    numero_viaggi = len(viaggi)
-    
     mezzi_usati = [v['mezzo'] for v in viaggi]
-    mezzo_preferito = max(set(mezzi_usati), key=mezzi_usati.count) if mezzi_usati else "Nessuno" 
+    mezzo_preferito = max(set(mezzi_usati), key=mezzi_usati.count)
 
     return { 
         "totale_co2": round(totale_co2, 2),
         "totale_km": round(totale_km, 2),
-        "numero_viaggi": numero_viaggi,
+        "numero_viaggi": len(viaggi),
         "mezzo_preferito": mezzo_preferito,
         "ultimo_viaggio": viaggi[-1]['data'],
         "data_inizio": data_inizio_formattata 
     }
 
-def leggi_tutti_utenti(): 
+def leggi_tutti_utenti(): # mi serve per la classifica
     db = carica_db()
     return list(db.keys())  
 
-def get_classifica_risparmio():
+def get_classifica_risparmio(): # leaderbord
     db = carica_db()
     classifica = []
     CO2_AUTO_PER_KM = 0.120 
@@ -126,3 +113,6 @@ def get_classifica_risparmio():
 def get_storico_completo(username):
     db = carica_db()
     return db.get(username, [])
+
+# licia e daniele se state leggendo questo sappiate che sono le 3 di notte e sto risolvendo il bug del wrapped 
+# e finire il terzo capitolo della relazione mi dovete almeno 1 sushi a testa quando ci vedremo

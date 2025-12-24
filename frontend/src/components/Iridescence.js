@@ -126,3 +126,5 @@ export default function Iridescence({ color = [0.1, 0.3, 0.2], speed = 0.2, ampl
 
   return <div ref={ctnDom} className="iridescence-container" {...rest} />;
 }
+
+// TUTTO PRESO DA REACT ANCHE CSS

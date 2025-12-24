@@ -7,6 +7,7 @@ import login as auth_service
 import storico
 from alberiCO2 import alberiCO2
 
+
 app = Flask(__name__)
 app.secret_key = "chiave-segreta-super-sicura"
 
@@ -14,18 +15,17 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = False 
 app.config['SESSION_COOKIE_HTTPONLY'] = True 
 
-CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000"]) 
+CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) # autorizzo ssto dominio
 
-# --- AUTENTICAZIONE ---
 
-@app.route('/api/login', methods=['POST']) 
+# autenticazione
+@app.route('/api/login', methods=['POST'])  # pagina login
 def api_login():
     data = request.get_json() or {}
-    # Chiama la funzione di login nel file login.py
-    user = auth_service.login_user(data.get('username'), data.get('password'))
+    user = auth_service.login_user(data.get('username'), data.get('password')) # richiamo i dati di login
     
     if user:
-        session.permanent = True
+        session.permanent = True # lascio la sessione permanente
         session['username'] = user['username']
         session['ruolo'] = user.get('role', 'utente')
         session['regione'] = user.get('regione', '') 
@@ -36,20 +36,20 @@ def api_login():
             "regione": session['regione']
         })
     
-    return jsonify({"ok": False, "errore": "Credenziali errate"}), 401
+    return jsonify({"ok": False, "errore": "Credenziali errate"}), 401 #  eccezione
 
-@app.route('/api/registrati', methods=['POST'])
+@app.route('/api/registrati', methods=['POST']) # pagina registrazione
 def api_registrati():
     data = request.get_json() or {}
-    ok, msg = auth_service.register_user(data.get('username'), data.get('password'), data.get('regione')) 
-    return jsonify({"ok": ok, "messaggio": msg}), 201 if ok else 409
+    ok, msg = auth_service.register_user(data.get('username'), data.get('password'), data.get('regione'))  # come prima
+    return jsonify({"ok": ok, "messaggio": msg}), 201 if ok else 409 # 201 creato, 409 errore
 
-@app.route('/api/logout', methods=['POST'])
+@app.route('/api/logout', methods=['POST']) # pagina logout
 def api_logout():
     session.clear()
     return jsonify({"ok": True})
 
-@app.route('/api/me', methods=['GET'])
+@app.route('/api/me', methods=['GET']) # pagina profilo
 def api_me():
     user = session.get('username')
     if user:
@@ -61,35 +61,32 @@ def api_me():
         })
     return jsonify({"ok": False}), 401
 
-@app.route('/api/utenti', methods=['GET'])
+@app.route('/api/utenti', methods=['GET']) # pagina utenti 
 def get_utenti():
     try:
-        lista = auth_service.get_users_list() 
+        lista = auth_service.get_users_list()  # tutti
         return jsonify({"ok": True, "utenti": lista})
     except Exception as e:
         print(e)
-        return jsonify({"ok": False, "utenti": []})
+        return jsonify({"ok": False, "utenti": []}) # errore generico
 
-# --- VEICOLI & NAVIGAZIONE ---
+# veicoli 
 
-@app.route('/api/veicoli', methods=['GET'])
+@app.route('/api/veicoli', methods=['GET']) # pagina veicoli
 def vehicles():
     return jsonify(opzione_trasporto()) 
 
-@app.route('/api/navigazione', methods=['POST']) 
+@app.route('/api/navigazione', methods=['POST']) # pagina navigazione
 def navigazione():
-    # DEBUG: Stampa nel terminale per confermare che la richiesta arriva
-    print("DEBUG: Richiesta navigazione ricevuta")
-    
     data = request.get_json() or {} 
     start, end = data.get('start'), data.get('end')
     mezzo = data.get('mezzo', 'car')
 
-    if not start or not end:
+    if not start or not end: # errore indirizzi
         return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400
     route = maps.get_google_distance(start, end)  
     
-    if not route:
+    if not route: # indirizzi sbagliati
         return jsonify({"ok": False, "errore": "Percorso non trovato"}), 400
 
     distanza_km = route.get('distanza_valore', 0) / 1000.0
@@ -97,13 +94,12 @@ def navigazione():
     if mezzo in ['bike', 'piedi', 'veicolo_elettrico']:
         emissioni = 0
     else:
-        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo) 
+        emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo)  # mi sereve per ccalclare la CO2
 
     current_username = session.get('username') 
-    print(f"DEBUG: Utente per navigazione: {current_username}") # DEBUG
     
     if current_username: 
-        storico.registra_viaggio(
+        storico.registra_viaggio( # registro il viaggio
             username=current_username,
             co2=emissioni,
             km=distanza_km,
@@ -112,7 +108,7 @@ def navigazione():
             end=route.get('end_address')      
         )
     
-    map_url = maps.get_embed_map_url(route.get('start_address'), route.get('end_address'))
+    map_url = maps.get_embed_map_url(route.get('start_address'), route.get('end_address')) # mappa interattiva
 
     return jsonify({
         "ok": True,
@@ -125,55 +121,45 @@ def navigazione():
         "map_url": map_url
     })
 
-# --- STORICO & STATISTICHE ---
+# wrap
 
 @app.route('/api/storico', methods=['GET'])
 def api_storico_completo():
     current_username = session.get('username')
     if not current_username:
-        return jsonify({"ok": False, "errore": "Non loggato"}), 401
+        return jsonify({"ok": False, "errore": "Non loggato"}), 401 # metto sempre che deve essere loggato
     dati = storico.get_storico_completo(current_username)
     return jsonify(dati) 
 
-@app.route('/api/wrapped', defaults={'username': None}, methods=['GET'])
-@app.route('/api/wrapped/<username>', methods=['GET']) 
+@app.route('/api/wrapped', defaults={'username': None}, methods=['GET']) # pagina wrapped
+@app.route('/api/wrapped/<username>', methods=['GET']) # pagina wrapped utente specifico
 def api_wrapped(username):
-    # Log per debug: controlla nel terminale cosa viene stampato quando clicchi
-    print(f"DEBUG: Richiesta Wrapped per username='{username}'")
-    
     current_username = session.get('username')
-    
-    # MODIFICA IMPORTANTE:
-    # Se viene passato uno username nell'URL, usiamo quello e permettiamo l'accesso pubblico.
-    # Questo risolve il problema se il frontend non invia i cookie di sessione.
-    # Se username è None, usiamo l'utente loggato (current_username).
-    target_user = username if username else current_username 
+
+    target_user = username if username else current_username # cioe o io o un utente cercato
     
     if not target_user:
-        print("DEBUG: Nessun utente target trovato (né URL né sessione)")
         return jsonify({"ok": False, "errore": "Accesso negato o utente non specificato."}), 401 
     
-    stats = storico.genera_wrapped(target_user) 
-    print(f"DEBUG: Stats generate per {target_user}: {stats}")
+    stats = storico.genera_wrapped(target_user) # genero le statistiche
 
-    # Se stats è None significa che c'è stato un errore grave nel DB, ma se è un dizionario vuoto va bene.
-    if stats is None:
+    if stats is None: # se non sta niente
         return jsonify({"ok": False, "messaggio": f"Nessun dato trovato per {target_user}"}), 404 
 
     return jsonify({"ok": True, "dati": stats, "target": target_user})
 
-@app.route('/api/calcolo-alberi', methods=['POST'])
+@app.route('/api/calcolo-alberi', methods=['POST']) # pagina calcolo alberi
 def api_calcolo_alberi():
     data = request.get_json() or {}
     co2_input = data.get('co2')
     
-    if co2_input is None:
+    if co2_input is None: # ese non sta niente
         return jsonify({"ok": False, "errore": "Valore CO2 mancante"}), 400
     
     try:
         co2_valore = float(co2_input)
     except ValueError:
-        return jsonify({"ok": False, "errore": "Il valore CO2 deve essere un numero"}), 400
+        return jsonify({"ok": False, "errore": "Il valore CO2 deve essere un numero"}), 400 # se metto altrp
 
     giorni_necessari = alberiCO2(co2_valore)
 
@@ -184,7 +170,7 @@ def api_calcolo_alberi():
         "messaggio": f"Un albero impiegherebbe circa {giorni_necessari} giorni per assorbire questa CO₂."
     })
 
-@app.route('/api/classifica', methods=['GET'])
+@app.route('/api/classifica', methods=['GET']) # pagina classifica
 def api_classifica():
     try:
         data = storico.get_classifica_risparmio()
