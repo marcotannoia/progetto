@@ -1,17 +1,15 @@
 version: '3.8'
 
 services:
-  # backend
   backend:
     build: ./backend
     ports:
       - "5000:5000"
     volumes:
       - ./backend:/app       
-    # docker-compose.yaml modificato
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-  # frontend React
+
   frontend:
     build: ./frontend
     ports:
