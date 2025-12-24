@@ -14,7 +14,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = False 
 app.config['SESSION_COOKIE_HTTPONLY'] = True 
 
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"]) 
+CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://127.0.0.1:3000"]) 
 
 # --- AUTENTICAZIONE ---
 
@@ -78,13 +78,15 @@ def vehicles():
 
 @app.route('/api/navigazione', methods=['POST']) 
 def navigazione():
+    # DEBUG: Stampa nel terminale per confermare che la richiesta arriva
+    print("DEBUG: Richiesta navigazione ricevuta")
+    
     data = request.get_json() or {} 
     start, end = data.get('start'), data.get('end')
     mezzo = data.get('mezzo', 'car')
 
     if not start or not end:
         return jsonify({"ok": False, "errore": "Indirizzi mancanti"}), 400
-
     route = maps.get_google_distance(start, end)  
     
     if not route:
@@ -98,6 +100,7 @@ def navigazione():
         emissioni = calcoloCO2.calcoloCO2(distanza_km, mezzo) 
 
     current_username = session.get('username') 
+    print(f"DEBUG: Utente per navigazione: {current_username}") # DEBUG
     
     if current_username: 
         storico.registra_viaggio(
@@ -135,15 +138,26 @@ def api_storico_completo():
 @app.route('/api/wrapped', defaults={'username': None}, methods=['GET'])
 @app.route('/api/wrapped/<username>', methods=['GET']) 
 def api_wrapped(username):
-    current_username = session.get('username')
-    if not current_username:
-        return jsonify({"ok": False, "errore": "Accesso negato."}), 401 
+    # Log per debug: controlla nel terminale cosa viene stampato quando clicchi
+    print(f"DEBUG: Richiesta Wrapped per username='{username}'")
     
+    current_username = session.get('username')
+    
+    # MODIFICA IMPORTANTE:
+    # Se viene passato uno username nell'URL, usiamo quello e permettiamo l'accesso pubblico.
+    # Questo risolve il problema se il frontend non invia i cookie di sessione.
+    # Se username è None, usiamo l'utente loggato (current_username).
     target_user = username if username else current_username 
+    
+    if not target_user:
+        print("DEBUG: Nessun utente target trovato (né URL né sessione)")
+        return jsonify({"ok": False, "errore": "Accesso negato o utente non specificato."}), 401 
+    
     stats = storico.genera_wrapped(target_user) 
+    print(f"DEBUG: Stats generate per {target_user}: {stats}")
 
-    if not stats:
-        # Se non ci sono dati, stats potrebbe essere un oggetto vuoto, ma se è None gestiamo l'errore
+    # Se stats è None significa che c'è stato un errore grave nel DB, ma se è un dizionario vuoto va bene.
+    if stats is None:
         return jsonify({"ok": False, "messaggio": f"Nessun dato trovato per {target_user}"}), 404 
 
     return jsonify({"ok": True, "dati": stats, "target": target_user})

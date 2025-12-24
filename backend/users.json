@@ -22,5 +22,11 @@
         "password": "scrypt:32768:8:1$XJRMxwLdwGkHk2hJ$b1d71c46b00beecf988442638c72e54caf1165f00d3865d35bd5de8ebea7dde9a96adcd2e858a4f2fa4f7d5491b17a7e520ff2d5b874b28a47b81473aa077746",
         "regione": "puglia",
         "role": "utente"
+    },
+    "rosanna": {
+        "username": "rosanna",
+        "password": "scrypt:32768:8:1$h9WBXXElKsPZO0RK$abf7818fe7f8e1d587acf468a4ba81f8c1c13c3c3d9e8e70dd5cce7ba8d5b35d2f4198b3ca93dbdebef13bf3eaf2be575b5754c440b4cf00fae582e947b9ad84",
+        "regione": "Puglia",
+        "role": "utente"
     }
 }

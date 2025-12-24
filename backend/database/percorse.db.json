@@ -15,6 +15,22 @@
             "mezzo": "piedi",
             "start": "Foggia FG, Italia",
             "end": "Taranto TA, Italia"
+        },
+        {
+            "data": "2025-12-24T10:23:57.063306",
+            "co2": 141.238,
+            "km": 882.738,
+            "mezzo": "car",
+            "start": "Bari BA, Italia",
+            "end": "Milano MI, Italia"
+        },
+        {
+            "data": "2025-12-24T10:28:00.178605",
+            "co2": 0.0,
+            "km": 20.174,
+            "mezzo": "public_bus",
+            "start": "71042 Cerignola FG, Italia",
+            "end": "71045 Orta Nova FG, Italia"
         }
     ],
     "licia": [
@@ -85,6 +101,16 @@
             "mezzo": "public_bus",
             "start": "71042 Cerignola FG, Italia",
             "end": "23041 Livigno SO, Italia"
+        }
+    ],
+    "rosanna": [
+        {
+            "data": "2025-12-24T10:30:42.482849",
+            "co2": 0.0,
+            "km": 1.852,
+            "mezzo": "bike",
+            "start": "Viale di Levante, 71042 Cerignola FG, Italia",
+            "end": "Via dei Mille, 71042 Cerignola FG, Italia"
         }
     ]
 }
