@@ -1,22 +1,16 @@
-/* frontend/src/pages/Login.css */
-
 .login-page {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start; 
   align-items: center;
-  
   position: relative;
   padding: 0 20px;
-
   padding-top: 50px; 
 }
 
-/* --- HERO TEXT --- */
 .hero-header {
   text-align: center;
   margin-bottom: 30px; 
@@ -49,7 +43,7 @@
   margin-top: 10px;
 }
 
-/* --- CARD STRUTTURA --- */
+
 .hero-content {
   width: 100%;
   display: flex;
@@ -84,7 +78,7 @@
   margin-bottom: 5px;
 }
 
-/* --- FORM & INPUTS --- */
+
 .login-form-stack {
   display: flex;
   flex-direction: column;
@@ -110,7 +104,6 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
-/* --- BOTTONE --- */
 .cta-search-btn {
   background: var(--btn-primary);
   color: var(--btn-text);
@@ -131,7 +124,7 @@
   filter: brightness(1.05);
 }
 
-/* --- ERROR BOX (Rosso) --- */
+
 .login-error-box {
   padding: 12px;
   background: rgba(239, 68, 68, 0.15);
@@ -142,12 +135,11 @@
   font-size: 0.9rem;
 }
 
-/* --- SUCCESS BOX (Verde - NUOVO) --- */
 .login-success-box {
   padding: 12px;
-  background: rgba(16, 185, 129, 0.15); /* Sfondo verde tenue */
-  border: 1px solid rgba(16, 185, 129, 0.4); /* Bordo verde */
-  color: #d1fae5; /* Testo verde chiaro */
+  background: rgba(16, 185, 129, 0.15); 
+  border: 1px solid rgba(16, 185, 129, 0.4); 
+  color: #d1fae5; 
   border-radius: 12px;
   text-align: center;
   font-size: 0.95rem;
@@ -155,8 +147,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* --- TOGGLE LOGIN/REGISTER --- */
-/* --- TOGGLE LOGIN/REGISTER --- */
+
 .login-toggle-area {
   display: flex;
   flex-direction: column;
@@ -171,19 +162,16 @@
 .login-toggle-area p { margin: 0; }
 
 .toggle-link-btn {
-  /* USA !important PER SOVRASCRIVERE LE REGOLE GLOBALI DI APP.CSS */
+
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
-  
   color: var(--btn-primary);
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  
   text-decoration: none;
-  
   transition: all 0.2s;
   padding: 0;
 }
@@ -191,12 +179,10 @@
 .toggle-link-btn:hover {
   color: #fff;
   text-decoration: underline;
-  /* Assicuriamo che anche all'hover non appaiano sfondi o bordi */
   background: transparent !important;
   box-shadow: none !important;
 }
 
-/* --- FIX PER LIGHT MODE --- */
 .light-mode .brand-title {
   background: linear-gradient(135deg, var(--btn-primary) 20%, #a7f3d0 80%, #ffffff 100%);
   -webkit-background-clip: text;
@@ -208,11 +194,10 @@
   color: #059669;
 }
 
-/* Adatta anche il box verde alla light mode per migliore leggibilità */
 .light-mode .login-success-box {
   background: rgba(16, 185, 129, 0.15);
   border-color: #059669;
-  color: #047857; /* Verde scuro per contrasto su sfondo chiaro */
+  color: #047857; 
 }
 
 @media (max-width: 600px) {

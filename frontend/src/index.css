@@ -1,28 +1,20 @@
-/* Definizione variabili globali per i temi */
 :root {
-  /* MODALITÀ GIORNO (Light Mode) - High Contrast Green */
-  --bg-color: #e6f2eb;          /* Sfondo pagina: Verde tenue */
-  --text-color: #022c22;        /* Testo: Verde Inchiostro (quasi nero, leggibilissimo) */
-  
-  /* Card: Bianco quasi puro per massimo stacco, meno trasparenza */
+  --bg-color: #e6f2eb;          
+  --text-color: #022c22;        
   --card-bg: #ffffff;           
-  
-  --input-bg: #f8fafc;          /* Input: Grigio chiarissimo freddo */
-  
-  /* Bordo: Verde Foresta Scuro (per fare il contorno netto che volevi) */
-  --border-color: #15803d;      
-  
-  --accent-color: #16a34a;      /* Verde deciso per i bottoni */
-  --shadow-color: rgba(21, 128, 61, 0.15); /* Ombra verde per profondità */
+  --input-bg: #f8fafc;         
+ --border-color: #15803d;      
+  --accent-color: #16a34a;     
+  --shadow-color: rgba(21, 128, 61, 0.15); 
 }
 
-/* MODALITÀ NOTTE (Dark Mode) */
+
 body.dark-mode {
   --bg-color: #0f172a;          
   --text-color: #f1f5f9;        
-  --card-bg: rgba(15, 23, 42, 0.6); /* Scuro e trasparente */
+  --card-bg: rgba(15, 23, 42, 0.6); 
   --input-bg: #1e293b;
-  --border-color: #334155;      /* Bordo grigio blu sottile */
+  --border-color: #334155;      
   --accent-color: #34D399;      
   --shadow-color: rgba(0, 0, 0, 0.3);
 }
@@ -34,7 +26,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -45,14 +36,10 @@ code {
     monospace;
 }
 
-/* Classi di utilità generiche */
 .search-panel, .leaderboard-panel, .rank-card, .profile-card {
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
-  
-  /* Usa la variabile border-color definita sopra */
   border-color: var(--border-color) !important;
-  
   backdrop-filter: blur(12px); 
   box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
 }

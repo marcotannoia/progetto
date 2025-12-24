@@ -4,13 +4,11 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0; /* Dietro al contenuto */
-  pointer-events: none; /* Non blocca i click */
-  
-  /* FIX PATINA: Opacità al 100% e sfondo nero per contrasto massimo */
+  z-index: 0; 
+  pointer-events: none; 
   opacity: 3;
   background-color: #000; 
-  mix-blend-mode: normal; /* Nessun blending strano, colori puri */
+  mix-blend-mode: normal; 
 }
 
 canvas {

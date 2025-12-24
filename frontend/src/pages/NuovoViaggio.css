@@ -1,23 +1,16 @@
-/* frontend/src/pages/NewTrip.css */
-
-/* --- LAYOUT GENERALE --- */
 .newtrip-page {
   width: 100%;
   height: 100%; 
   overflow: hidden;
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  
   position: relative;
   padding: 0 20px;
-
-  padding-top: 50px; 
+ padding-top: 50px; 
 }
 
-/* --- HERO SECTION --- */
 .hero-header {
   text-align: center;
   margin-bottom: 30px; 
@@ -48,7 +41,7 @@
   opacity: 0.9;
 }
 
-/* --- CARD PRINCIPALE --- */
+
 .hero-content {
   width: 100%;
   display: flex;
@@ -84,7 +77,7 @@
   margin-bottom: 10px;
 }
 
-/* INPUT */
+
 .input-fields {
   display: flex;
   flex-direction: column;
@@ -110,7 +103,7 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
-/* --- SELETTORE VEICOLI --- */
+
 .vehicle-selector {
   display: flex;
   justify-content: center;
@@ -165,7 +158,6 @@
   color: var(--text-main);
 }
 
-/* CTA BUTTON */
 .cta-search-btn {
   background: var(--btn-primary);
   color: var(--btn-text);
@@ -180,7 +172,7 @@
 }
 .cta-search-btn:hover { transform: scale(1.02); filter: brightness(1.05); }
 
-/* --- RISULTATI FULLSCREEN --- */
+
 .results-overlay {
   position: fixed;
   inset: 0;
@@ -199,7 +191,6 @@
   background: #000;
 }
 
-/* SINISTRA: MAPPA */
 .res-left {
   flex: 3;
   position: relative;
@@ -247,7 +238,7 @@
 
 .arrow-green { color: var(--btn-primary); font-size: 1.2rem; }
 
-/* DESTRA: STATS */
+
 .res-right {
   flex: 1;
   min-width: 450px;
@@ -281,19 +272,18 @@
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* MODIFICA: Label bianco puro per ENTRAMBE le box */
+
 .stat-label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 3px;
-  color: #ffffff;   /* Bianco puro */
-  opacity: 1;       /* Nessuna trasparenza */
+  color: #ffffff;  
+  opacity: 1;      
   margin-bottom: 8px;
   font-weight: 700; 
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
-/* MODIFICA: Numero gigante bianco puro (NO GRADIENTE) */
 .stat-giant {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 3rem; 
@@ -302,18 +292,16 @@
   line-height: 1;
   margin-bottom: 8px;
   
-  color: #ffffff; /* Bianco solido */
-  background: none; /* Rimosso gradiente */
-  -webkit-text-fill-color: initial; /* Reset per colore solido */
-  
+  color: #ffffff; 
+  background: none; 
+  -webkit-text-fill-color: initial; 
   word-wrap: break-word; 
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Leggera ombra per stacco */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3); 
 }
 
-/* MODIFICA: Sottotitolo più chiaro */
 .stat-sub { 
   font-size: 0.85rem; 
-  color: #d1d5db; /* Grigio chiaro leggibile */
+  color: #d1d5db;
   line-height: 1.4; 
 }
 
@@ -357,7 +345,7 @@
 }
 .close-icon:hover { background: #ef4444; border-color: #ef4444; transform: rotate(90deg); }
 
-/* --- FIX PER LIGHT MODE --- */
+
 .light-mode .brand-title {
   background: linear-gradient(135deg, var(--btn-primary) 20%, #a7f3d0 80%, #ffffff 100%);
   -webkit-background-clip: text;
