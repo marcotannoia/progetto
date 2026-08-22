@@ -135,7 +135,9 @@ def create_google_authorization_url(state):
 
 def exchange_google_code(code):
     if not all((COGNITO_DOMAIN, CLIENT_ID, CLIENT_SECRET, OAUTH_CALLBACK_URL)):
-        return None
+        return None, "oauth_configuration_missing"
+    if not client:
+        return None, "cognito_client_unavailable"
 
     try:
         response = requests.post(
@@ -153,7 +155,7 @@ def exchange_google_code(code):
         response.raise_for_status()
         access_token = response.json().get("access_token")
         if not access_token:
-            return None
+            return None, "access_token_missing"
 
         user_info = client.get_user(AccessToken=access_token)
         attributes = {
@@ -164,9 +166,17 @@ def exchange_google_code(code):
             "username": user_info["Username"],
             "regione": attributes.get("custom:regione", ""),
             "role": "utente",
-        }
-    except (requests.RequestException, ClientError, KeyError, ValueError):
-        return None
+        }, None
+    except requests.HTTPError as error:
+        status = error.response.status_code if error.response is not None else "unknown"
+        return None, f"token_endpoint_http_{status}"
+    except requests.RequestException:
+        return None, "token_endpoint_unreachable"
+    except ClientError as error:
+        code = error.response.get("Error", {}).get("Code", "unknown")
+        return None, f"cognito_{code}"
+    except (KeyError, ValueError):
+        return None, "invalid_provider_response"
 
 
 def new_oauth_state():

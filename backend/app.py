@@ -173,30 +173,63 @@ def google_oauth_start():
         return redirect("https://www.ecotracker.it/login?oauth_error=unavailable")
 
     session["oauth_state"] = state
-    return redirect(authorization_url)
+    response = redirect(authorization_url)
+    # A dedicated cross-site cookie survives the Google/Cognito redirect chain.
+    # The main authenticated session remains SameSite=Lax.
+    response.set_cookie(
+        "oauth_state",
+        state,
+        max_age=600,
+        secure=is_production,
+        httponly=True,
+        samesite="None" if is_production else "Lax",
+        path="/api/oauth/google",
+    )
+    return response
 
 
 @app.route("/api/oauth/google/callback", methods=["GET"])
 @limiter.limit("20 per hour")
 def google_oauth_callback():
-    expected_state = session.pop("oauth_state", None)
+    expected_state = request.cookies.get("oauth_state") or session.pop("oauth_state", None)
     returned_state = request.args.get("state")
     code = request.args.get("code")
-    if not expected_state or not returned_state or not secrets.compare_digest(expected_state, returned_state):
-        return redirect("https://www.ecotracker.it/login?oauth_error=invalid_state")
-    if not code or request.args.get("error"):
-        return redirect("https://www.ecotracker.it/login?oauth_error=cancelled")
 
-    user = auth_service.exchange_google_code(code)
+    def finish(location):
+        response = redirect(location)
+        response.delete_cookie(
+            "oauth_state",
+            secure=is_production,
+            httponly=True,
+            samesite="None" if is_production else "Lax",
+            path="/api/oauth/google",
+        )
+        return response
+
+    if not expected_state or not returned_state or not secrets.compare_digest(expected_state, returned_state):
+        app.logger.warning("Google OAuth rejected: state missing or mismatched")
+        return finish("https://www.ecotracker.it/login?oauth_error=invalid_state")
+    if not code or request.args.get("error"):
+        app.logger.info("Google OAuth cancelled by provider or user")
+        return finish("https://www.ecotracker.it/login?oauth_error=cancelled")
+
+    user, exchange_error = auth_service.exchange_google_code(code)
     if not user:
-        return redirect("https://www.ecotracker.it/login?oauth_error=failed")
+        app.logger.warning("Google OAuth failed during token exchange: %s", exchange_error)
+        return finish("https://www.ecotracker.it/login?oauth_error=failed")
 
     session.clear()
     session.permanent = True
     session["username"] = user["username"]
     session["ruolo"] = user.get("role", "utente")
     session["regione"] = user.get("regione", "")
-    return redirect("https://www.ecotracker.it/?auth=success")
+    app.logger.info("Google OAuth completed successfully")
+    return finish("https://www.ecotracker.it/?auth=success")
+
+
+@app.route("/api/health", methods=["GET"])
+def api_health():
+    return jsonify({"ok": True, "status": "ready"})
 
 
 @app.route("/api/registrati", methods=["POST"])

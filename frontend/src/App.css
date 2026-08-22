@@ -24,5 +24,16 @@
 .icon-badge { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 44px; border-radius: 13px; color: var(--green-dark); background: var(--green-soft); border: 1px solid #ccefd5; }
 .icon-badge svg { width: 22px; height: 22px; }
 .loading-screen { display: grid; min-height: 70vh; place-items: center; color: var(--green-dark); font-weight: 700; }
+.wakeup-page { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)); background: #fff; }
+.wakeup-card { width: min(460px, 100%); padding: clamp(28px, 7vw, 46px); border: 1px solid var(--border); border-radius: 24px; text-align: center; background: var(--surface); box-shadow: 0 12px 32px rgba(24, 64, 35, .07); }
+.wakeup-mark { width: 58px; height: 58px; margin: 0 auto 20px; display: grid; place-items: center; border: 2px solid #bdecc9; border-top-color: var(--green); border-radius: 50%; animation: wakeup-spin 1s linear infinite; }
+.wakeup-mark span { width: 19px; height: 28px; display: block; border-radius: 100% 0 100% 0; background: var(--green); transform: rotate(-35deg); }
+.wakeup-eyebrow { margin: 0 0 8px; color: var(--green-dark); font-size: .78rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.wakeup-card h1 { margin: 0; color: var(--ink); font-size: clamp(1.55rem, 6vw, 2rem); }
+.wakeup-card > p:not(.wakeup-eyebrow) { margin: 16px 0 24px; color: var(--muted); line-height: 1.65; }
+.wakeup-retry { display: inline-flex; align-items: center; justify-content: center; gap: 9px; }
+.wakeup-card small { display: block; margin-top: 18px; color: var(--muted); }
+@keyframes wakeup-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .wakeup-mark { animation: none; } }
 @media (max-width: 640px) { .page-body { padding-left: 14px; padding-right: 14px; } .brand-header { margin-top: 8px; margin-bottom: 24px; } .panel { border-radius: 20px; padding: 22px 17px; box-shadow: 0 6px 18px rgba(24, 64, 35, .06); } }
 @media (hover: none) { .primary-button:hover { background: var(--green); } }
