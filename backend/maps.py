@@ -6,10 +6,19 @@ import requests
 
 SHARED_API_KEY = os.environ.get("GOOGLE_API_KEY")
 DIRECTIONS_API_KEY = os.environ.get("GOOGLE_MAPS_DIRECTIONS_API_KEY") or SHARED_API_KEY
+EMBED_API_KEY = os.environ.get("GOOGLE_MAPS_EMBED_API_KEY")
 REQUEST_TIMEOUT_SECONDS = 10
 
 
-def get_google_distance(partenza, arrivo):
+def travel_mode(mezzo):
+    return {
+        "piedi": "walking",
+        "bike": "bicycling",
+        "public_bus": "transit",
+    }.get(mezzo, "driving")
+
+
+def get_google_distance(partenza, arrivo, mezzo="car"):
     if not DIRECTIONS_API_KEY:
         return None
 
@@ -20,6 +29,7 @@ def get_google_distance(partenza, arrivo):
                 "origin": partenza,
                 "destination": arrivo,
                 "key": DIRECTIONS_API_KEY,
+                "mode": travel_mode(mezzo),
                 "units": "metric",
                 "language": "it",
             },
@@ -43,7 +53,7 @@ def get_google_distance(partenza, arrivo):
     }
 
 
-def get_maps_link(partenza, destinazione):
+def get_maps_link(partenza, destinazione, mezzo="car"):
     if not partenza or not destinazione:
         return None
 
@@ -51,7 +61,23 @@ def get_maps_link(partenza, destinazione):
         {
             "origin": partenza,
             "destination": destinazione,
-            "travelmode": "driving",
+            "travelmode": travel_mode(mezzo),
         }
     )
     return f"https://www.google.com/maps/dir/?api=1&{query_string}"
+
+
+def get_embed_map_url(partenza, destinazione, mezzo="car"):
+    if not EMBED_API_KEY or not partenza or not destinazione:
+        return None
+
+    query_string = urllib.parse.urlencode(
+        {
+            "key": EMBED_API_KEY,
+            "origin": partenza,
+            "destination": destinazione,
+            "mode": travel_mode(mezzo),
+            "language": "it",
+        }
+    )
+    return f"https://www.google.com/maps/embed/v1/directions?{query_string}"

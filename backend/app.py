@@ -264,7 +264,7 @@ def navigazione():
     if mezzo not in ALLOWED_VEHICLES:
         return jsonify({"ok": False, "errore": "Mezzo di trasporto non valido."}), 400
 
-    route = maps.get_google_distance(start, end)
+    route = maps.get_google_distance(start, end, mezzo)
     if not route:
         return jsonify({"ok": False, "errore": "Percorso non trovato."}), 400
 
@@ -291,7 +291,8 @@ def navigazione():
             "emissioni_co2": f"{emissioni:.2f} kg di CO₂",
             "mezzo_scelto": mezzo,
             "is_logged": bool(username),
-            "maps_link": maps.get_maps_link(route.get("start_address"), route.get("end_address")),
+            "maps_link": maps.get_maps_link(route.get("start_address"), route.get("end_address"), mezzo),
+            "map_embed_url": maps.get_embed_map_url(route.get("start_address"), route.get("end_address"), mezzo),
         }
     )
 
