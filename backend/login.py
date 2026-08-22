@@ -127,7 +127,7 @@ def create_google_authorization_url(state):
         "response_type": "code",
         "client_id": CLIENT_ID,
         "redirect_uri": OAUTH_CALLBACK_URL,
-        "scope": "openid email profile",
+        "scope": "openid email profile aws.cognito.signin.user.admin",
         "state": state,
     })
     return f"{COGNITO_DOMAIN}/oauth2/authorize?{query}"
