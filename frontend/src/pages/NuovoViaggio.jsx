@@ -14,6 +14,11 @@ export default function NuovoViaggio({ user }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   useEffect(() => { api('/api/veicoli').then(setVehicles).catch((e) => setError(e.message)); }, []);
+  useEffect(() => {
+    if (!result) return undefined;
+    document.body.classList.add('modal-open');
+    return () => document.body.classList.remove('modal-open');
+  }, [result]);
   async function calculate() {
     if (!route.start.trim() || !route.end.trim()) { setError('Inserisci partenza e destinazione.'); return; }
     setLoading(true); setError(''); setTreeInfo('');

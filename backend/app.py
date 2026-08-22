@@ -3,8 +3,9 @@ from decimal import Decimal
 from functools import wraps
 import os
 import re
+import secrets
 
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, redirect, request, session
 from flask.json.provider import DefaultJSONProvider
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -161,6 +162,41 @@ def api_login():
             "regione": session["regione"],
         }
     )
+
+
+@app.route("/api/oauth/google", methods=["GET"])
+@limiter.limit("20 per hour")
+def google_oauth_start():
+    state = auth_service.new_oauth_state()
+    authorization_url = auth_service.create_google_authorization_url(state)
+    if not authorization_url:
+        return redirect("https://www.ecotracker.it/login?oauth_error=unavailable")
+
+    session["oauth_state"] = state
+    return redirect(authorization_url)
+
+
+@app.route("/api/oauth/google/callback", methods=["GET"])
+@limiter.limit("20 per hour")
+def google_oauth_callback():
+    expected_state = session.pop("oauth_state", None)
+    returned_state = request.args.get("state")
+    code = request.args.get("code")
+    if not expected_state or not returned_state or not secrets.compare_digest(expected_state, returned_state):
+        return redirect("https://www.ecotracker.it/login?oauth_error=invalid_state")
+    if not code or request.args.get("error"):
+        return redirect("https://www.ecotracker.it/login?oauth_error=cancelled")
+
+    user = auth_service.exchange_google_code(code)
+    if not user:
+        return redirect("https://www.ecotracker.it/login?oauth_error=failed")
+
+    session.clear()
+    session.permanent = True
+    session["username"] = user["username"]
+    session["ruolo"] = user.get("role", "utente")
+    session["regione"] = user.get("regione", "")
+    return redirect("https://www.ecotracker.it/?auth=success")
 
 
 @app.route("/api/registrati", methods=["POST"])

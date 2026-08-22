@@ -8,6 +8,7 @@
 .history-summary div { display: grid; }.history-summary span { color: var(--muted); font-size: .72rem; }
 .history-panel { padding: clamp(17px, 4vw, 30px); }
 .month-group + .month-group { margin-top: 30px; }
+.month-group { content-visibility: auto; contain-intrinsic-size: 320px; }
 .month-group h2 { color: var(--green-dark); font-size: .9rem; text-transform: capitalize; letter-spacing: .05em; }
 .history-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--border); }
 .history-route { min-width: 0; display: grid; gap: 5px; }.history-route strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.history-route small, .history-values small { color: var(--muted); }

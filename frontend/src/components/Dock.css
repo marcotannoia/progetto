@@ -1,7 +1,8 @@
-.dock { position: fixed; z-index: 20; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; gap: 5px; padding: 7px; border: 1px solid var(--border); border-radius: 19px; background: #fff; box-shadow: 0 10px 30px rgba(24, 64, 35, .13); }
+.dock { position: fixed; z-index: 20; inset-inline: 0; width: max-content; margin-inline: auto; bottom: max(14px, env(safe-area-inset-bottom)); display: flex; gap: 5px; padding: 7px; border: 1px solid var(--border); border-radius: 19px; background: #fff; box-shadow: 0 8px 22px rgba(24, 64, 35, .11); contain: layout paint; }
 .dock-item { min-width: 62px; min-height: 53px; padding: 7px 9px; border: 0; border-radius: 13px; background: transparent; color: var(--muted); display: grid; place-items: center; gap: 3px; }
 .dock-item svg { width: 21px; height: 21px; }
 .dock-item span { font-size: .64rem; font-weight: 700; }
 .dock-item:hover, .dock-item.active { color: var(--green-dark); background: var(--green-soft); }
 .dock-item.danger:hover { color: var(--danger); background: #fff1f0; }
+@media (hover: none) { .dock-item:hover { color: var(--muted); background: transparent; } .dock-item.active:hover { color: var(--green-dark); background: var(--green-soft); } }
 @media (max-width: 420px) { .dock { width: calc(100% - 20px); justify-content: space-around; } .dock-item { min-width: 0; flex: 1; padding-inline: 4px; } }

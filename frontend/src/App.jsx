@@ -4,6 +4,7 @@ import { LuLogIn, LuLogOut, LuRoute, LuSearch, LuUserRound } from 'react-icons/l
 import { api } from './api.js';
 import Dock from './components/Dock.jsx';
 import Login from './pages/Login.jsx';
+import LegalPage from './pages/LegalPage.jsx';
 import NuovoViaggio from './pages/NuovoViaggio.jsx';
 import PaginaStoricoCompleto from './pages/PaginaStoricoCompleto.jsx';
 import Profilo from './pages/Profilo.jsx';
@@ -27,6 +28,6 @@ function AppContent() {
     ] : [{ icon: <LuLogIn />, label: 'Accedi', active: location.pathname === '/login', onClick: () => navigate('/login') }]),
   ];
   if (loading) return <div className="loading-screen">EcoTrack</div>;
-  return <div className="app-shell"><main className="page-body"><Routes><Route path="/" element={<NuovoViaggio user={user} />} /><Route path="/login" element={user ? <Navigate to="/" replace /> : <Login setUser={setUser} />} /><Route path="/cerca" element={user ? <Ricerca user={user} /> : <Navigate to="/login" replace />} /><Route path="/profilo" element={user ? <Profilo user={user} setUser={setUser} /> : <Navigate to="/login" replace />} /><Route path="/storico" element={user ? <PaginaStoricoCompleto /> : <Navigate to="/login" replace />} /><Route path="/wrapped/:username" element={user ? <Wrapped /> : <Navigate to="/login" replace />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></main><Dock items={items} /></div>;
+  return <div className="app-shell"><main className="page-body"><Routes><Route path="/" element={<NuovoViaggio user={user} />} /><Route path="/login" element={user ? <Navigate to="/" replace /> : <Login setUser={setUser} />} /><Route path="/privacy" element={<LegalPage type="privacy" />} /><Route path="/termini" element={<LegalPage type="terms" />} /><Route path="/cerca" element={user ? <Ricerca user={user} /> : <Navigate to="/login" replace />} /><Route path="/profilo" element={user ? <Profilo user={user} setUser={setUser} /> : <Navigate to="/login" replace />} /><Route path="/storico" element={user ? <PaginaStoricoCompleto /> : <Navigate to="/login" replace />} /><Route path="/wrapped/:username" element={user ? <Wrapped /> : <Navigate to="/login" replace />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></main><Dock items={items} /></div>;
 }
 export default function App() { return <BrowserRouter><AppContent /></BrowserRouter>; }

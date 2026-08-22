@@ -1,7 +1,10 @@
 :root { font-family: 'Montserrat', sans-serif; color: #162019; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; --green: #2dd25c; --green-dark: #18853a; --green-soft: #eafbef; --ink: #162019; --muted: #667068; --border: #dce5de; --surface: #fff; --surface-soft: #f6f9f7; --danger: #b42318; }
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; background: #fff; }
-body { min-width: 320px; min-height: 100vh; min-height: 100dvh; color: var(--ink); -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-width: 320px; min-height: 100vh; min-height: 100svh; color: var(--ink); -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+body.modal-open { overflow: hidden; }
 button, input, select { font: inherit; }
-button { cursor: pointer; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; touch-action: manipulation; }
 button:focus-visible, input:focus-visible { outline: 3px solid rgba(45, 210, 92, .25); outline-offset: 2px; }

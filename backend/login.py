@@ -3,6 +3,10 @@ import os
 import hmac
 import hashlib
 import base64
+import secrets
+from urllib.parse import urlencode
+
+import requests
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
@@ -12,6 +16,8 @@ REGION_NAME = os.getenv("AWS_REGION")
 USER_POOL_ID = os.getenv("COGNITO_USER_POOL_ID")
 CLIENT_ID = os.getenv("COGNITO_CLIENT_ID")
 CLIENT_SECRET = os.getenv("COGNITO_CLIENT_SECRET")
+COGNITO_DOMAIN = os.getenv("COGNITO_DOMAIN", "").rstrip("/")
+OAUTH_CALLBACK_URL = os.getenv("OAUTH_CALLBACK_URL", "")
 
 try:
     client = boto3.client('cognito-idp', region_name=REGION_NAME)
@@ -110,6 +116,61 @@ def login_user(username, password):
         return None
     except Exception:
         return None
+
+
+def create_google_authorization_url(state):
+    if not all((COGNITO_DOMAIN, CLIENT_ID, OAUTH_CALLBACK_URL)):
+        return None
+
+    query = urlencode({
+        "identity_provider": "Google",
+        "response_type": "code",
+        "client_id": CLIENT_ID,
+        "redirect_uri": OAUTH_CALLBACK_URL,
+        "scope": "openid email profile",
+        "state": state,
+    })
+    return f"{COGNITO_DOMAIN}/oauth2/authorize?{query}"
+
+
+def exchange_google_code(code):
+    if not all((COGNITO_DOMAIN, CLIENT_ID, CLIENT_SECRET, OAUTH_CALLBACK_URL)):
+        return None
+
+    try:
+        response = requests.post(
+            f"{COGNITO_DOMAIN}/oauth2/token",
+            data={
+                "grant_type": "authorization_code",
+                "client_id": CLIENT_ID,
+                "code": code,
+                "redirect_uri": OAUTH_CALLBACK_URL,
+            },
+            auth=(CLIENT_ID, CLIENT_SECRET),
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=10,
+        )
+        response.raise_for_status()
+        access_token = response.json().get("access_token")
+        if not access_token:
+            return None
+
+        user_info = client.get_user(AccessToken=access_token)
+        attributes = {
+            item["Name"]: item["Value"]
+            for item in user_info.get("UserAttributes", [])
+        }
+        return {
+            "username": user_info["Username"],
+            "regione": attributes.get("custom:regione", ""),
+            "role": "utente",
+        }
+    except (requests.RequestException, ClientError, KeyError, ValueError):
+        return None
+
+
+def new_oauth_state():
+    return secrets.token_urlsafe(32)
 
 def get_users_list():
     if not client: return []
