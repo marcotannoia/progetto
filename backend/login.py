@@ -30,28 +30,23 @@ def get_secret_hash(username):
     return base64.b64encode(dig).decode()
 
 def traduci_errore_aws(error):
-    if not hasattr(error, 'response'): return str(error)
+    if not hasattr(error, 'response'):
+        return "Servizio di autenticazione temporaneamente non disponibile."
     code = error.response['Error']['Code']
-    msg = error.response['Error']['Message']
     
     if code == 'InvalidParameterException':
-        if "password" in msg.lower():
-            return "Password troppo debole: usa 8 caratteri."
-        return "Parametri non validi."
+        return "Parametri di registrazione non validi."
     elif code == 'UsernameExistsException':
         return "Questo username è già in uso."
     elif code == 'LimitExceededException':
         return "Troppi tentativi. Riprova più tardi."
-    else:
-        return f"Errore: {msg}"
+    return "Servizio di autenticazione temporaneamente non disponibile."
 
-# --- MODIFICA SOLO QUI ---
 def register_user(username, password, regione, email):
     if not client: return False, "Errore server: Credenziali AWS mancanti."
     try:
         secret_hash = get_secret_hash(username)
-        
-        # 1. Creiamo l'utente su Cognito
+
         client.sign_up(
             ClientId=CLIENT_ID,
             SecretHash=secret_hash,
@@ -62,26 +57,32 @@ def register_user(username, password, regione, email):
                 {'Name': 'email', 'Value': email}
             ]
         )
-        
-        # 2. Conferma FORZATA (Bypassa invio mail e codice)
-        # Questo comando richiede che le chiavi AWS su Render abbiano permessi Admin/PowerUser
-        client.admin_confirm_sign_up(
-            UserPoolId=USER_POOL_ID,
-            Username=username
-        )
-        
-        # 3. Messaggio speciale per dire al frontend di saltare il codice
-        return True, "REGISTRAZIONE_COMPLETA"
+
+        return True, "CODICE_INVIATO"
 
     except ClientError as e:
         return False, traduci_errore_aws(e)
-    except Exception as e:
-        return False, str(e)
-# -------------------------
-
+    except Exception:
+        return False, "Servizio di autenticazione temporaneamente non disponibile."
 def verify_user(username, code):
-    # Non serve più, ma la lasciamo per non rompere app.py
-    return True, "Account verificato."
+    if not client: return False, "Servizio di autenticazione non disponibile."
+    try:
+        client.confirm_sign_up(
+            ClientId=CLIENT_ID,
+            SecretHash=get_secret_hash(username),
+            Username=username,
+            ConfirmationCode=code
+        )
+        return True, "Account verificato."
+    except ClientError as error:
+        code = error.response.get('Error', {}).get('Code')
+        if code in {'CodeMismatchException', 'ExpiredCodeException'}:
+            return False, "Codice non valido o scaduto."
+        if code == 'NotAuthorizedException':
+            return False, "Account già verificato."
+        return False, traduci_errore_aws(error)
+    except Exception:
+        return False, "Servizio di autenticazione temporaneamente non disponibile."
 
 def login_user(username, password):
     if not client: return None
@@ -113,14 +114,18 @@ def login_user(username, password):
 def get_users_list():
     if not client: return []
     try:
-        response = client.list_users(
+        lista = []
+        paginator = client.get_paginator('list_users')
+        for page in paginator.paginate(
             UserPoolId=USER_POOL_ID,
             AttributesToGet=['custom:regione']
-        )
-        lista = []
-        for u in response['Users']:
-            reg = next((a['Value'] for a in u['Attributes'] if a['Name'] == 'custom:regione'), "")
-            lista.append({"username": u['Username'], "regione": reg.lower()})
+        ):
+            for user in page.get('Users', []):
+                regione = next(
+                    (attribute['Value'] for attribute in user['Attributes'] if attribute['Name'] == 'custom:regione'),
+                    ""
+                )
+                lista.append({"username": user['Username'], "regione": regione.lower()})
         return lista
     except Exception:
         return []
