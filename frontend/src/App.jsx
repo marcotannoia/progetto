@@ -11,6 +11,7 @@ import PaginaStoricoCompleto from './pages/PaginaStoricoCompleto.jsx';
 import Profilo from './pages/Profilo.jsx';
 import Ricerca from './pages/Ricerca.jsx';
 import Wrapped from './pages/Wrapped.jsx';
+import ChooseUsername from './pages/ChooseUsername.jsx';
 import './App.css';
 
 function AppContent() {
@@ -69,6 +70,9 @@ function AppContent() {
       return <BackendWakeup onRetry={() => setRetryKey((key) => key + 1)} />;
     }
     return <div className="loading-screen">EcoTrack</div>;
+  }
+  if (user?.needs_username) {
+    return <ChooseUsername setUser={setUser} />;
   }
   return <div className="app-shell"><main className="page-body"><Routes><Route path="/" element={<NuovoViaggio user={user} />} /><Route path="/login" element={user ? <Navigate to="/" replace /> : <Login setUser={setUser} />} /><Route path="/privacy" element={<LegalPage type="privacy" />} /><Route path="/termini" element={<LegalPage type="terms" />} /><Route path="/cerca" element={user ? <Ricerca user={user} /> : <Navigate to="/login" replace />} /><Route path="/profilo" element={user ? <Profilo user={user} setUser={setUser} /> : <Navigate to="/login" replace />} /><Route path="/storico" element={user ? <PaginaStoricoCompleto /> : <Navigate to="/login" replace />} /><Route path="/wrapped/:username" element={user ? <Wrapped /> : <Navigate to="/login" replace />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></main><Dock items={items} /></div>;
 }

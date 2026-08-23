@@ -1,0 +1,13 @@
+.username-page { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom)); background: #fff; }
+.username-content { width: min(540px, 100%); }
+.username-content .brand-header { margin-top: 0; }
+.username-panel { text-align: center; }
+.username-icon { width: 54px; height: 54px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 50%; color: var(--green-dark); background: var(--green-soft); }
+.username-icon svg { width: 26px; height: 26px; }
+.username-panel h1 { margin: 0; font-size: clamp(1.55rem, 6vw, 2rem); }
+.username-panel > p { margin: 12px auto 24px; max-width: 380px; color: var(--muted); line-height: 1.55; }
+.username-field { position: relative; display: block; }
+.username-field > span { position: absolute; z-index: 1; top: 50%; left: 17px; color: var(--green-dark); font-weight: 800; transform: translateY(-50%); }
+.username-field .field { padding-left: 38px; }
+.username-panel form > small { margin-top: -5px; color: var(--muted); font-size: .72rem; text-align: left; }
+@media (max-width: 640px) { .username-panel { padding: 28px 20px; } }

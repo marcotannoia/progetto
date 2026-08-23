@@ -162,8 +162,11 @@ def exchange_google_code(code):
             item["Name"]: item["Value"]
             for item in user_info.get("UserAttributes", [])
         }
+        public_username = attributes.get("preferred_username", "").lower().strip()
         return {
-            "username": user_info["Username"],
+            "cognito_username": user_info["Username"],
+            "username": public_username,
+            "needs_username": not public_username,
             "regione": attributes.get("custom:regione", ""),
             "role": "utente",
         }, None
@@ -182,21 +185,58 @@ def exchange_google_code(code):
 def new_oauth_state():
     return secrets.token_urlsafe(32)
 
+
+def set_public_username(cognito_username, public_username):
+    if not client or not USER_POOL_ID:
+        return False, "Servizio di autenticazione non disponibile."
+
+    normalized = public_username.lower().strip()
+    try:
+        paginator = client.get_paginator("list_users")
+        for page in paginator.paginate(UserPoolId=USER_POOL_ID):
+            for user in page.get("Users", []):
+                if user.get("Username") == cognito_username:
+                    continue
+
+                attributes = {
+                    item["Name"]: item["Value"]
+                    for item in user.get("Attributes", [])
+                }
+                existing_public = attributes.get("preferred_username", "").lower().strip()
+                existing_login = user.get("Username", "").lower().strip()
+                if normalized in {existing_public, existing_login}:
+                    return False, "Questo username è già in uso."
+
+        client.admin_update_user_attributes(
+            UserPoolId=USER_POOL_ID,
+            Username=cognito_username,
+            UserAttributes=[{"Name": "preferred_username", "Value": normalized}],
+        )
+        return True, normalized
+    except ClientError:
+        return False, "Non è stato possibile salvare lo username. Riprova."
+
+
 def get_users_list():
     if not client: return []
     try:
         lista = []
         paginator = client.get_paginator('list_users')
-        for page in paginator.paginate(
-            UserPoolId=USER_POOL_ID,
-            AttributesToGet=['custom:regione']
-        ):
+        for page in paginator.paginate(UserPoolId=USER_POOL_ID):
             for user in page.get('Users', []):
-                regione = next(
-                    (attribute['Value'] for attribute in user['Attributes'] if attribute['Name'] == 'custom:regione'),
-                    ""
-                )
-                lista.append({"username": user['Username'], "regione": regione.lower()})
+                attributes = {
+                    item['Name']: item['Value']
+                    for item in user.get('Attributes', [])
+                }
+                cognito_username = user.get('Username', '')
+                public_username = attributes.get('preferred_username', '').lower().strip()
+                if not public_username and cognito_username.lower().startswith('google_'):
+                    continue
+
+                lista.append({
+                    "username": public_username or cognito_username,
+                    "regione": attributes.get('custom:regione', '').lower(),
+                })
         return lista
     except Exception:
         return []

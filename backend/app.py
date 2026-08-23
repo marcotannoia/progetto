@@ -220,7 +220,10 @@ def google_oauth_callback():
 
     session.clear()
     session.permanent = True
+    session["cognito_username"] = user["cognito_username"]
     session["username"] = user["username"]
+    session["needs_username"] = user["needs_username"]
+    session["provider"] = "google"
     session["ruolo"] = user.get("role", "utente")
     session["regione"] = user.get("regione", "")
     app.logger.info("Google OAuth completed successfully")
@@ -287,16 +290,70 @@ def api_logout():
 @app.route("/api/me", methods=["GET"])
 def api_me():
     username = session.get("username")
-    if not username:
+    cognito_username = session.get("cognito_username")
+    legacy_google_session = (
+        not cognito_username
+        and isinstance(username, str)
+        and username.lower().startswith("google_")
+    )
+    if legacy_google_session:
+        cognito_username = username
+        session["cognito_username"] = username
+        session["needs_username"] = True
+        session["provider"] = "google"
+
+    if not username and not cognito_username:
         return jsonify({"ok": False, "is_logged": False}), 401
 
+    needs_username = bool(session.get("needs_username"))
     return jsonify(
         {
             "ok": True,
-            "username": username,
+            "username": "" if needs_username else username,
             "ruolo": session.get("ruolo"),
             "regione": session.get("regione", ""),
             "is_logged": True,
+            "needs_username": needs_username,
+        }
+    )
+
+
+@app.route("/api/profile/username", methods=["POST"])
+@limiter.limit("10 per hour")
+def choose_public_username():
+    cognito_username = session.get("cognito_username")
+    if not cognito_username or session.get("provider") != "google":
+        return jsonify({"ok": False, "errore": "Sessione Google non valida."}), 401
+    if not session.get("needs_username"):
+        return jsonify({"ok": False, "errore": "Lo username è già stato scelto."}), 409
+
+    data, error = json_body()
+    if error:
+        return error
+
+    username = str(data.get("username", "")).lower().strip()
+    if not valid_username(username):
+        return jsonify(
+            {
+                "ok": False,
+                "errore": "Usa da 3 a 30 caratteri: lettere, numeri, punto, trattino o underscore.",
+            }
+        ), 400
+
+    success, result = auth_service.set_public_username(cognito_username, username)
+    if not success:
+        return jsonify({"ok": False, "errore": result}), 409
+
+    session["username"] = result
+    session["needs_username"] = False
+    return jsonify(
+        {
+            "ok": True,
+            "username": result,
+            "ruolo": session.get("ruolo", "utente"),
+            "regione": session.get("regione", ""),
+            "is_logged": True,
+            "needs_username": False,
         }
     )
 
