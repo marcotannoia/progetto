@@ -67,7 +67,7 @@ function AppContent() {
   ];
   if (loading) {
     if (showWakeup) {
-      return <BackendWakeup onRetry={() => setRetryKey((key) => key + 1)} />;
+      return <BackendWakeup />;
     }
     return <div className="loading-screen">EcoTrack</div>;
   }
